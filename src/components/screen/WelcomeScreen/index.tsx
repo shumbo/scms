@@ -9,10 +9,14 @@ import {
 import { MouseEventHandler, VFC } from "react";
 
 export type WelcomeScreenProps = {
+  supported: boolean;
   onClick: MouseEventHandler;
 };
 
-export const WelcomeScreen: VFC<WelcomeScreenProps> = ({ onClick }) => {
+export const WelcomeScreen: VFC<WelcomeScreenProps> = ({
+  onClick,
+  supported,
+}) => {
   return (
     <Box>
       <Container centerContent>
@@ -29,7 +33,12 @@ export const WelcomeScreen: VFC<WelcomeScreenProps> = ({ onClick }) => {
           Content Manager for Statically Generated Websites
         </Text>
         <Center>
-          <Button marginTop={2} colorScheme="purple" onClick={onClick}>
+          <Button
+            disabled={!supported}
+            marginTop={2}
+            colorScheme="purple"
+            onClick={onClick}
+          >
             Start
           </Button>
         </Center>
