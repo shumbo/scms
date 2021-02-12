@@ -1,15 +1,26 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { VFC } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { InversifyProvider } from "./context/Inversify";
 import { container } from "./ioc";
+import { CreateProjectPage } from "./pages/CreateProjectPage";
 import { WelcomePage } from "./pages/WelcomePage";
 
 export const App: VFC = () => {
   return (
     <ChakraProvider>
       <InversifyProvider container={container}>
-        <WelcomePage />
+        <Router>
+          <Switch>
+            <Route path="/create-project">
+              <CreateProjectPage />
+            </Route>
+            <Route path="/">
+              <WelcomePage />
+            </Route>
+          </Switch>
+        </Router>
       </InversifyProvider>
     </ChakraProvider>
   );
