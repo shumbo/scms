@@ -10,6 +10,9 @@ module.exports = {
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
+    "prettier/@typescript-eslint",
+    "prettier/react",
+    "prettier/",
   ],
   rules: {
     "react/prop-types": ["off"],
