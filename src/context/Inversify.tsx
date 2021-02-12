@@ -18,7 +18,9 @@ export const InversifyProvider: VFC<Props> = ({ container, children }) => {
   );
 };
 
-export function useInjection<T>(identifier: interfaces.ServiceIdentifier<T>) {
+export function useInjection<T>(
+  identifier: interfaces.ServiceIdentifier<T>
+): T {
   const { container } = useContext(InversifyContext);
   if (!container) {
     throw new Error("Failed to find a container");

@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+
 import { UserAgent } from "../../domain/model/UserAgent";
 import { UserAgentRepository } from "../../domain/repository/UserAgentRepository";
 import { TYPES } from "../../TYPES";

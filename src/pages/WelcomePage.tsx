@@ -1,4 +1,5 @@
 import { useMemo, VFC } from "react";
+
 import { WelcomeScreen } from "../components/screen/WelcomeScreen";
 import { useInjection } from "../context/Inversify";
 import { TYPES } from "../TYPES";
@@ -10,10 +11,10 @@ export const WelcomePage: VFC = () => {
   );
   return (
     <WelcomeScreen
-      onClick={() => {}}
+      onClick={() => console.log("hello")}
       supported={useMemo(
         () => userAgentUseCase.get().supportFileSystemAccessAPI,
-        []
+        [userAgentUseCase]
       )}
     />
   );
