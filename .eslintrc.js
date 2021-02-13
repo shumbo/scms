@@ -18,6 +18,7 @@ module.exports = {
     "react/prop-types": ["off"],
     "react/react-in-jsx-scope": ["off"],
     "import/order": ["error", { "newlines-between": "always" }],
+    "@typescript-eslint/no-namespace": ["off"],
   },
   settings: {
     react: {
