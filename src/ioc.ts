@@ -25,4 +25,5 @@ container
   .to(UserAgentRepositoryImpl);
 container
   .bind<ProjectRepository>(TYPES.ProjectRepository)
-  .to(ProjectRepositoryImpl);
+  .to(ProjectRepositoryImpl)
+  .inSingletonScope();

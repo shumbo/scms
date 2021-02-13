@@ -1,5 +1,6 @@
 import { injectable } from "inversify";
 
+import { CONFIG_FILE_NAME } from "../../constants/files";
 import { Project } from "../../domain/model/Project/project";
 import { ProjectRepository } from "../../domain/repository/ProjectRepository";
 
@@ -25,6 +26,7 @@ function decodeProject(str: string): Project {
 @injectable()
 export class ProjectRepositoryImpl implements ProjectRepository {
   private currentProject: Project | null = null;
+  private dh: FileSystemDirectoryHandle | null = null;
   async open(): Promise<ProjectRepository.OpenResult> {
     let dh: FileSystemDirectoryHandle;
     try {
@@ -32,9 +34,10 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     } catch {
       return { success: false, reason: "NO_DIRECTORY_SELECTED" };
     }
+    this.dh = dh;
     let configText: string;
     try {
-      const config = await dh.getFileHandle(".scmsrc");
+      const config = await dh.getFileHandle(CONFIG_FILE_NAME);
       const file = await config.getFile();
       configText = await file.text();
     } catch {
@@ -48,5 +51,22 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     }
     this.currentProject = project;
     return { success: true, project };
+  }
+  async create(project: Project): Promise<ProjectRepository.CreateResult> {
+    if (!this.dh) {
+      return { success: false, reason: "NO_OPENED_DIRECTORY" };
+    }
+    const dh = this.dh;
+    let fh: FileSystemFileHandle;
+    try {
+      fh = await dh.getFileHandle(CONFIG_FILE_NAME, { create: true });
+    } catch {
+      return { success: false, reason: "ERROR_CREATE_FILE" };
+    }
+    const writable = await fh.createWritable();
+    await writable.write(encodeProject(project));
+    await writable.close();
+    this.currentProject = project;
+    return { success: true };
   }
 }
