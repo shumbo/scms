@@ -8,6 +8,7 @@ import {
 } from "../components/project/ProjectSidebar";
 
 import { ProjectHomePage } from "./ProjectHomePage";
+import { ProjectPostTablePage } from "./ProjectPostTablePage";
 
 export const ProjectSidebarPage: VFC = () => {
   const { path, url } = useRouteMatch();
@@ -26,7 +27,7 @@ export const ProjectSidebarPage: VFC = () => {
             <ProjectHomePage />
           </Route>
           <Route exact path={`${path}/posts`}>
-            posts
+            <ProjectPostTablePage />
           </Route>
           <Route exact path={`${path}/assets`}>
             assets

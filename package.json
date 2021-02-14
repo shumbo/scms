@@ -47,6 +47,7 @@
     "@emotion/styled": "^11.1.5",
     "bowser": "^2.11.0",
     "framer-motion": "^3.3.0",
+    "idb-keyval": "^5.0.2",
     "inversify": "^5.0.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

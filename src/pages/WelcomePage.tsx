@@ -24,7 +24,7 @@ export const WelcomePage: VFC = () => {
         onClick={async () => {
           const openResult = await projectUseCase.open();
           if (openResult.success) {
-            console.log("Navigate to home");
+            history.push("/project");
           } else {
             switch (openResult.reason) {
               case "NO_DIRECTORY_SELECTED":

@@ -19,4 +19,12 @@ export class ProjectInteractor implements ProjectUseCase {
     const result = await this.projectRepository.create(project);
     return result;
   }
+  async listPost(): Promise<ProjectUseCase.ListPostResult> {
+    const getCurrentProjectResult = await this.projectRepository.getCurrentProject();
+    if (!getCurrentProjectResult.success) {
+      return getCurrentProjectResult;
+    }
+    const result = await this.projectRepository.listPost();
+    return result;
+  }
 }
