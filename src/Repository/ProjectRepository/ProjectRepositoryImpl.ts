@@ -6,6 +6,7 @@ import { Project } from "../../domain/model/Project/project";
 import { ProjectRepository } from "../../domain/repository/ProjectRepository";
 import { IDB_DIRECTORY_HANDLE_KEY } from "../../constants/idb";
 import { Post } from "../../domain/model/Post/Post";
+import { resolveDirectoryHandle } from "../../helpers/FileSystem/resolveFileHandle";
 
 function encodeProject(project: Project): string {
   return JSON.stringify({
@@ -53,13 +54,12 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     if (!this.dh || !this.currentProject) {
       return { success: false, reason: "NO_OPENED_PROJECT" };
     }
-    let markdownDh: FileSystemDirectoryHandle = this.dh;
+    let markdownDh: FileSystemDirectoryHandle;
     try {
-      for await (const dir of this.currentProject.markdownDirectory
-        .split("/")
-        .filter((str) => !!str)) {
-        markdownDh = await markdownDh.getDirectoryHandle(dir);
-      }
+      markdownDh = await resolveDirectoryHandle(
+        this.dh,
+        this.currentProject.markdownDirectory
+      );
     } catch {
       return { success: false, reason: "NO_MARKDOWN_DIRECTORY" };
     }
