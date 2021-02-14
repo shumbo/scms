@@ -15,6 +15,7 @@ export const WelcomePage: VFC = () => {
   );
   const projectUseCase = useInjection<ProjectUseCase>(TYPES.ProjectUseCase);
 
+  const [directoryName, setDirectoryName] = useState("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const cancelRef = useRef<HTMLButtonElement>(null);
 
@@ -30,6 +31,7 @@ export const WelcomePage: VFC = () => {
               case "NO_DIRECTORY_SELECTED":
                 break;
               case "NO_CONFIG_FILE":
+                setDirectoryName(openResult.directoryName);
                 setIsOpen(true);
                 break;
             }
@@ -48,7 +50,7 @@ export const WelcomePage: VFC = () => {
           history.push("/create-project");
         }, [history])}
         cancelRef={cancelRef}
-        directoryName="hi"
+        directoryName={directoryName}
       />
     </Fragment>
   );

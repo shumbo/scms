@@ -13,11 +13,9 @@ export namespace ProjectRepository {
     | { success: true; project: Project }
     | {
         success: false;
-        reason:
-          | "NO_DIRECTORY_SELECTED"
-          | "NO_CONFIG_FILE"
-          | "INVALID_CONFIG_FILE";
-      };
+        reason: "NO_DIRECTORY_SELECTED" | "INVALID_CONFIG_FILE";
+      }
+    | { success: false; reason: "NO_CONFIG_FILE"; directoryName: string };
   export type CreateResult =
     | { success: true }
     | { success: false; reason: "NO_OPENED_DIRECTORY" | "ERROR_CREATE_FILE" };

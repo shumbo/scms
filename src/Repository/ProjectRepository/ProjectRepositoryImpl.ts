@@ -78,7 +78,8 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     dh: FileSystemDirectoryHandle
   ): Promise<
     | { success: true; project: Project }
-    | { success: false; reason: "NO_CONFIG_FILE" | "INVALID_CONFIG_FILE" }
+    | { success: false; reason: "INVALID_CONFIG_FILE" }
+    | { success: false; reason: "NO_CONFIG_FILE"; directoryName: string }
   > {
     if ((await dh.queryPermission({ mode: "readwrite" })) !== "granted") {
       const result = await dh.requestPermission({ mode: "readwrite" });
@@ -92,7 +93,11 @@ export class ProjectRepositoryImpl implements ProjectRepository {
       const file = await config.getFile();
       configText = await file.text();
     } catch {
-      return { success: false, reason: "NO_CONFIG_FILE" };
+      return {
+        success: false,
+        reason: "NO_CONFIG_FILE",
+        directoryName: dh.name,
+      };
     }
     let project: Project;
     try {
