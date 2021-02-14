@@ -21,7 +21,7 @@ export const ProjectSidebarPage: VFC = () => {
         <ProjectSidebarItem to={`${url}/posts`}>Posts</ProjectSidebarItem>
         <ProjectSidebarItem to={`${url}/assets`}>Assets</ProjectSidebarItem>
       </ProjectSidebar>
-      <Box>
+      <Box width="100%">
         <Switch>
           <Route exact path={path}>
             <ProjectHomePage />

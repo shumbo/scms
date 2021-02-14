@@ -22,7 +22,9 @@ export const PostTable: VFC<PostTableProps> = ({ posts }) => {
           <Tr key={post.filename}>
             <Td>{post.filename}</Td>
             <Td>
-              <Button colorScheme="purple">Edit</Button>
+              <Button variant="outline" colorScheme="purple">
+                Edit
+              </Button>
             </Td>
           </Tr>
         ))}

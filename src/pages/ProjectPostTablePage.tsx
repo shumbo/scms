@@ -22,6 +22,7 @@ export const ProjectPostTablePage: VFC = () => {
       }
     });
     return () => (isSubscribed = false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return <PostTableScreen posts={posts} />;
+  return <PostTableScreen posts={posts} onCreate={() => window.prompt()} />;
 };

@@ -17,3 +17,13 @@ export const Default = Template.bind({});
 Default.args = {
   posts: [new Post("xxx.md"), new Post("yyy.md")],
 };
+
+export const Empty = Template.bind({});
+Empty.args = {
+  posts: [],
+};
+
+export const Loading = Template.bind({});
+Loading.args = {
+  posts: null,
+};
