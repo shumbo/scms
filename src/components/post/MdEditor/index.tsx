@@ -1,10 +1,33 @@
 import { Box, IconButton, Stack } from "@chakra-ui/react";
+import hljs from "highlight.js";
+import "highlight.js/styles/default.css";
+import MarkdownIt from "markdown-it";
 import { VFC } from "react";
 import { FaFileImage } from "react-icons/fa";
 import { defaultCommands, Editor } from "react-split-mde";
-import "wysiwyg.css";
 
+import "wysiwyg.css";
 import { editorCss } from "./editor.style";
+
+const md = MarkdownIt({
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return (
+          '<pre class="hljs"><code>' +
+          hljs.highlight(lang, str, true).value +
+          "</code></pre>"
+        );
+        // eslint-disable-next-line no-empty
+      } catch (__) {}
+    }
+    return (
+      '<pre class="hljs"><code>' +
+      MarkdownIt().utils.escapeHtml(str) +
+      "</code></pre>"
+    );
+  },
+});
 
 export type MdEditorProps = {
   value: string;
@@ -24,6 +47,7 @@ export const MdEditor: VFC<MdEditorProps> = ({ value, onChange }) => {
             value={value}
             onChange={onChange}
             commands={{ ...defaultCommands }}
+            parser={async (originalText) => md.render(originalText)}
           />
         </Box>
       </Box>
