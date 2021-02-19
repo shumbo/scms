@@ -55,7 +55,10 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.15.1",
+    "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.0",
-    "reflect-metadata": "^0.1.13"
+    "react-split-mde": "0.1.1",
+    "reflect-metadata": "^0.1.13",
+    "wysiwyg.css": "^0.0.3"
   }
 }
