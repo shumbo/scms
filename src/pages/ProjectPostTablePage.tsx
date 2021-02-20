@@ -1,4 +1,5 @@
 import { useEffect, useState, VFC } from "react";
+import { useHistory } from "react-router";
 
 import { PostTableScreen } from "../components/screen/PostTableScreen";
 import { useInjection } from "../context/Inversify";
@@ -9,6 +10,7 @@ import { ProjectUseCase } from "../UseCase/InputPort/ProjectUseCase";
 export const ProjectPostTablePage: VFC = () => {
   const projectUseCase = useInjection<ProjectUseCase>(TYPES.ProjectUseCase);
   const [posts, setPosts] = useState<Post[] | null>(null);
+  const history = useHistory();
   useEffect(() => {
     let isSubscribed = true;
     projectUseCase.listPost().then((result) => {
@@ -22,7 +24,14 @@ export const ProjectPostTablePage: VFC = () => {
       }
     });
     return () => (isSubscribed = false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  return <PostTableScreen posts={posts} onCreate={() => window.prompt()} />;
+  }, [projectUseCase]);
+  return (
+    <PostTableScreen
+      posts={posts}
+      onCreate={() => window.prompt()}
+      onEdit={(filepath) => {
+        history.push(`/project/posts/${filepath}`);
+      }}
+    />
+  );
 };

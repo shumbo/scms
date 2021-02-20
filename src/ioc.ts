@@ -16,8 +16,12 @@ export const container = new Container();
 // UseCases
 container
   .bind<UserAgentUseCase>(TYPES.UserAgentUseCase)
-  .to(UserAgentInteractor);
-container.bind<ProjectUseCase>(TYPES.ProjectUseCase).to(ProjectInteractor);
+  .to(UserAgentInteractor)
+  .inSingletonScope();
+container
+  .bind<ProjectUseCase>(TYPES.ProjectUseCase)
+  .to(ProjectInteractor)
+  .inSingletonScope();
 
 // Repository
 container

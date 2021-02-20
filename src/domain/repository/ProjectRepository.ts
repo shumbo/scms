@@ -6,6 +6,7 @@ export interface ProjectRepository {
   create(project: Project): Promise<ProjectRepository.CreateResult>;
   getCurrentProject(): Promise<ProjectRepository.GetCurrentProjectResult>;
   listPost(): Promise<ProjectRepository.ListPostResult>;
+  getPost(filename: string): Promise<ProjectRepository.GetPostResult>;
 }
 
 export namespace ProjectRepository {
@@ -36,6 +37,16 @@ export namespace ProjectRepository {
         reason:
           | "NO_OPENED_PROJECT"
           | "NO_MARKDOWN_DIRECTORY"
+          | GetCurrentProjectErrorReason;
+      };
+  export type GetPostResult =
+    | { success: true; post: File }
+    | {
+        success: false;
+        reason:
+          | "NO_OPENED_PROJECT"
+          | "NO_MARKDOWN_DIRECTORY"
+          | "NO_SUCH_FILE"
           | GetCurrentProjectErrorReason;
       };
 }

@@ -6,9 +6,10 @@ import { Post } from "../../../domain/model/Post/Post";
 
 export type PostTableProps = {
   posts: Post[];
+  onEdit(filepath: string): void;
 };
 
-export const PostTable: VFC<PostTableProps> = ({ posts }) => {
+export const PostTable: VFC<PostTableProps> = ({ posts, onEdit }) => {
   return (
     <Table variant="striped">
       <Thead>
@@ -22,7 +23,11 @@ export const PostTable: VFC<PostTableProps> = ({ posts }) => {
           <Tr key={post.filename}>
             <Td>{post.filename}</Td>
             <Td>
-              <Button variant="outline" colorScheme="purple">
+              <Button
+                variant="outline"
+                colorScheme="purple"
+                onClick={() => onEdit(post.filename)}
+              >
                 Edit
               </Button>
             </Td>

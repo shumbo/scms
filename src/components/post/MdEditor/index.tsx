@@ -1,6 +1,6 @@
 import { Box, IconButton, Stack } from "@chakra-ui/react";
 import hljs from "highlight.js";
-import "highlight.js/styles/default.css";
+import "highlight.js/styles/github-gist.css";
 import MarkdownIt from "markdown-it";
 import { VFC } from "react";
 import { FaFileImage } from "react-icons/fa";

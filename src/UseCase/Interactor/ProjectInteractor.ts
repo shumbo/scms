@@ -27,4 +27,7 @@ export class ProjectInteractor implements ProjectUseCase {
     const result = await this.projectRepository.listPost();
     return result;
   }
+  getPost(filepath: string): Promise<ProjectUseCase.GetPostResult> {
+    return this.projectRepository.getPost(filepath);
+  }
 }

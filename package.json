@@ -12,7 +12,8 @@
     "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "postinstall": "typesync && yarn install --ignore-scripts"
+    "postinstall": "typesync && yarn install --ignore-scripts",
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

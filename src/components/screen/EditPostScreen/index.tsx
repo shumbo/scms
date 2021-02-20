@@ -12,10 +12,18 @@ import { VFC } from "react";
 import { MdEditor } from "../../post/MdEditor";
 
 export type EditPostScreenProps = {
+  filename: string;
+  value: string;
+  onChange(newValue: string): void;
   onSave(): Promise<void>;
 };
 
-export const EditPostScreen: VFC<EditPostScreenProps> = ({ onSave }) => {
+export const EditPostScreen: VFC<EditPostScreenProps> = ({
+  onSave,
+  onChange,
+  value,
+  filename,
+}) => {
   return (
     <Box width="100%" p="16">
       <HStack justifyContent="space-between">
@@ -24,15 +32,15 @@ export const EditPostScreen: VFC<EditPostScreenProps> = ({ onSave }) => {
             <BreadcrumbLink>Posts</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink isCurrentPage>ArticleNameGoesHere</BreadcrumbLink>
+            <BreadcrumbLink isCurrentPage>{filename}</BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
         <Button onClick={onSave} colorScheme="purple">
           Save
         </Button>
       </HStack>
-      <Divider my="4"></Divider>
-      <MdEditor value={"# hello"} onChange={console.log} />
+      <Divider my="4" />
+      <MdEditor value={value} onChange={onChange} />
     </Box>
   );
 };

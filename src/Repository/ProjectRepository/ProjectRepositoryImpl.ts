@@ -6,7 +6,8 @@ import { Project } from "../../domain/model/Project/project";
 import { ProjectRepository } from "../../domain/repository/ProjectRepository";
 import { IDB_DIRECTORY_HANDLE_KEY } from "../../constants/idb";
 import { Post } from "../../domain/model/Post/Post";
-import { resolveDirectoryHandle } from "../../helpers/FileSystem/resolveFileHandle";
+import { resolveDirectoryHandle } from "../../helpers/FileSystem/resolveDirectoryHandle";
+import { resolveFileHandle } from "../../helpers/FileSystem/resolveFileHandle";
 
 function encodeProject(project: Project): string {
   return JSON.stringify({
@@ -50,6 +51,7 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     }
     return { success: true, project: this.currentProject };
   }
+
   async listPost(): Promise<ProjectRepository.ListPostResult> {
     if (!this.dh || !this.currentProject) {
       return { success: false, reason: "NO_OPENED_PROJECT" };
@@ -138,5 +140,27 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     await writable.close();
     this.currentProject = project;
     return { success: true };
+  }
+  async getPost(filename: string): Promise<ProjectRepository.GetPostResult> {
+    const currentProjectResult = await this.getCurrentProject();
+    if (!currentProjectResult.success) {
+      return currentProjectResult;
+    }
+    const project = currentProjectResult.project;
+    if (!this.dh) {
+      return { success: false, reason: "NO_OPENED_PROJECT" };
+    }
+    let markdownDh: FileSystemDirectoryHandle;
+    try {
+      markdownDh = await resolveDirectoryHandle(
+        this.dh,
+        project.markdownDirectory
+      );
+    } catch {
+      return { success: false, reason: "NO_MARKDOWN_DIRECTORY" };
+    }
+    const fileHandle = await resolveFileHandle(markdownDh, filename);
+    const file = await fileHandle.getFile();
+    return { success: true, post: file };
   }
 }

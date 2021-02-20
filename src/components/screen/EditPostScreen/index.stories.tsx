@@ -1,3 +1,4 @@
+import { action } from "@storybook/addon-actions";
 import { Meta, Story } from "@storybook/react";
 
 import { EditPostScreenProps, EditPostScreen } from ".";
@@ -12,4 +13,9 @@ const Template: Story<EditPostScreenProps> = (args) => (
 );
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  onSave: (...args) => {
+    action("onSave")(...args);
+    return new Promise((resolve) => setTimeout(resolve, 2000));
+  },
+};

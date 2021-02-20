@@ -19,11 +19,13 @@ import { PostTable } from "../../project/PostTable";
 export type PostTableScreenProps = {
   posts: Post[] | null;
   onCreate: MouseEventHandler;
+  onEdit(filepath: string): void;
 };
 
 export const PostTableScreen: VFC<PostTableScreenProps> = ({
   posts,
   onCreate,
+  onEdit,
 }) => {
   return (
     <Fragment>
@@ -37,7 +39,7 @@ export const PostTableScreen: VFC<PostTableScreenProps> = ({
         <Divider my="4"></Divider>
         {posts ? (
           posts.length > 0 ? (
-            <PostTable posts={posts} />
+            <PostTable posts={posts} onEdit={onEdit} />
           ) : (
             <Alert
               status="info"

@@ -7,6 +7,7 @@ import {
   ProjectSidebarItem,
 } from "../components/project/ProjectSidebar";
 
+import { EditPostPage } from "./EditPostPage";
 import { ProjectHomePage } from "./ProjectHomePage";
 import { ProjectPostTablePage } from "./ProjectPostTablePage";
 
@@ -28,6 +29,9 @@ export const ProjectSidebarPage: VFC = () => {
           </Route>
           <Route exact path={`${path}/posts`}>
             <ProjectPostTablePage />
+          </Route>
+          <Route path={`${path}/posts/:filename`}>
+            <EditPostPage />
           </Route>
           <Route exact path={`${path}/assets`}>
             assets
