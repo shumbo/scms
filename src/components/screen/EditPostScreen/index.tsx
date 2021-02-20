@@ -8,6 +8,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { VFC } from "react";
+import { Link } from "react-router-dom";
 
 import { MdEditor } from "../../post/MdEditor";
 
@@ -28,7 +29,7 @@ export const EditPostScreen: VFC<EditPostScreenProps> = ({
     <Box width="100%" p="16">
       <HStack justifyContent="space-between">
         <Breadcrumb>
-          <BreadcrumbItem>
+          <BreadcrumbItem as={Link} to="/project/posts">
             <BreadcrumbLink>Posts</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>

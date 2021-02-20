@@ -53,6 +53,7 @@
     "@emotion/styled": "^11.1.5",
     "bowser": "^2.11.0",
     "framer-motion": "^3.3.0",
+    "gray-matter": "^4.0.2",
     "highlight.js": "^10.6.0",
     "idb-keyval": "^5.0.2",
     "inversify": "^5.0.5",

@@ -5,6 +5,7 @@ import MarkdownIt from "markdown-it";
 import { VFC } from "react";
 import { FaFileImage } from "react-icons/fa";
 import { defaultCommands, Editor } from "react-split-mde";
+import matter from "gray-matter";
 
 import "wysiwyg.css";
 import { editorCss } from "./editor.style";
@@ -47,7 +48,14 @@ export const MdEditor: VFC<MdEditorProps> = ({ value, onChange }) => {
             value={value}
             onChange={onChange}
             commands={{ ...defaultCommands }}
-            parser={async (originalText) => md.render(originalText)}
+            parser={async (originalText) => {
+              const m = matter(originalText);
+              const frontmatterMd =
+                Object.keys(m.data).length > 0
+                  ? "```json\n" + JSON.stringify(m.data, null, 2) + "\n```\n"
+                  : "";
+              return md.render(frontmatterMd + m.content);
+            }}
           />
         </Box>
       </Box>
