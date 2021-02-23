@@ -3,4 +3,5 @@ export const TYPES = {
   UserAgentRepository: Symbol.for("UserAgentRepository"),
   ProjectUseCase: Symbol.for("ProjectUseCase"),
   ProjectRepository: Symbol.for("ProjectRepository"),
+  MarkdownService: Symbol.for("MarkdownService"),
 };

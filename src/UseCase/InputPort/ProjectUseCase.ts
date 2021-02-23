@@ -6,6 +6,7 @@ export interface ProjectUseCase {
   create(project: Project): Promise<ProjectUseCase.CreateResult>;
   listPost(): Promise<ProjectUseCase.ListPostResult>;
   getPost(filepath: string): Promise<ProjectUseCase.GetPostResult>;
+  render(originalText: string): Promise<string>;
 }
 export namespace ProjectUseCase {
   export type OpenResult =

@@ -10,6 +10,8 @@ import { ProjectUseCase } from "./UseCase/InputPort/ProjectUseCase";
 import { ProjectInteractor } from "./UseCase/Interactor/ProjectInteractor";
 import { ProjectRepository } from "./domain/repository/ProjectRepository";
 import { ProjectRepositoryImpl } from "./Repository/ProjectRepository/ProjectRepositoryImpl";
+import { MarkdownService } from "./domain/service/MarkdownService";
+import { MarkdownServiceImpl } from "./service/MarkdownService/MarkdownServiceImpl";
 
 export const container = new Container();
 
@@ -30,4 +32,10 @@ container
 container
   .bind<ProjectRepository>(TYPES.ProjectRepository)
   .to(ProjectRepositoryImpl)
+  .inSingletonScope();
+
+// Service
+container
+  .bind<MarkdownService>(TYPES.MarkdownService)
+  .to(MarkdownServiceImpl)
   .inSingletonScope();

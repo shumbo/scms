@@ -10,6 +10,7 @@ import matter from "gray-matter";
 import "wysiwyg.css";
 import { editorCss } from "./editor.style";
 
+// minimum markdown renderer for storybook
 const md = MarkdownIt({
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
@@ -33,9 +34,20 @@ const md = MarkdownIt({
 export type MdEditorProps = {
   value: string;
   onChange(newValue: string): void;
+  render?: (originalValue: string) => Promise<string>;
 };
 
-export const MdEditor: VFC<MdEditorProps> = ({ value, onChange }) => {
+export const MdEditor: VFC<MdEditorProps> = ({ value, onChange, render }) => {
+  const renderFn =
+    render ??
+    (async (originalText) => {
+      const m = matter(originalText);
+      const frontmatterMd =
+        Object.keys(m.data).length > 0
+          ? "```json\n" + JSON.stringify(m.data, null, 2) + "\n```\n"
+          : "";
+      return md.render(frontmatterMd + m.content);
+    });
   return (
     <Stack>
       <Stack direction="row">
@@ -48,14 +60,7 @@ export const MdEditor: VFC<MdEditorProps> = ({ value, onChange }) => {
             value={value}
             onChange={onChange}
             commands={{ ...defaultCommands }}
-            parser={async (originalText) => {
-              const m = matter(originalText);
-              const frontmatterMd =
-                Object.keys(m.data).length > 0
-                  ? "```json\n" + JSON.stringify(m.data, null, 2) + "\n```\n"
-                  : "";
-              return md.render(frontmatterMd + m.content);
-            }}
+            parser={renderFn}
           />
         </Box>
       </Box>

@@ -43,6 +43,7 @@ export const EditPostPage: VFC = () => {
         value={value}
         onChange={setValue}
         onSave={async () => {}}
+        render={(originalText) => projectUseCase.render(originalText)}
       />
     </Fragment>
   );

@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 
 import { Project } from "../../domain/model/Project/project";
 import { ProjectRepository } from "../../domain/repository/ProjectRepository";
+import { MarkdownService } from "../../domain/service/MarkdownService";
 import { TYPES } from "../../TYPES";
 import { ProjectUseCase } from "../InputPort/ProjectUseCase";
 
@@ -9,7 +10,9 @@ import { ProjectUseCase } from "../InputPort/ProjectUseCase";
 export class ProjectInteractor implements ProjectUseCase {
   constructor(
     @inject(TYPES.ProjectRepository)
-    private projectRepository: ProjectRepository
+    private projectRepository: ProjectRepository,
+    @inject(TYPES.MarkdownService)
+    private markdownService: MarkdownService
   ) {}
   async open(): Promise<ProjectUseCase.OpenResult> {
     const result = await this.projectRepository.open();
@@ -29,5 +32,8 @@ export class ProjectInteractor implements ProjectUseCase {
   }
   getPost(filepath: string): Promise<ProjectUseCase.GetPostResult> {
     return this.projectRepository.getPost(filepath);
+  }
+  async render(originalText: string): Promise<string> {
+    return this.markdownService.render(originalText);
   }
 }

@@ -18,9 +18,10 @@ function encodeProject(project: Project): string {
   });
 }
 
-function decodeProject(str: string): Project {
+function decodeProject(str: string, dh: FileSystemDirectoryHandle): Project {
   const obj = JSON.parse(str);
   return new Project(
+    dh,
     obj.name,
     obj["markdown-directory"],
     obj["asset-directory"],
@@ -103,7 +104,7 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     }
     let project: Project;
     try {
-      project = decodeProject(configText);
+      project = decodeProject(configText, dh);
     } catch (e) {
       return { success: false, reason: "INVALID_CONFIG_FILE" };
     }
@@ -162,5 +163,24 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     const fileHandle = await resolveFileHandle(markdownDh, filename);
     const file = await fileHandle.getFile();
     return { success: true, post: file };
+  }
+  async getAsset(assetPath: string): Promise<ProjectRepository.GetAssetResult> {
+    const currentProjectResult = await this.getCurrentProject();
+    if (!currentProjectResult.success) {
+      return currentProjectResult;
+    }
+    const project = currentProjectResult.project;
+    if (!this.dh) {
+      return { success: false, reason: "NO_OPENED_PROJECT" };
+    }
+    let assetDh: FileSystemDirectoryHandle;
+    try {
+      assetDh = await resolveDirectoryHandle(this.dh, project.assetDirectory);
+    } catch {
+      return { success: false, reason: "NO_ASSET_DIRECTORY" };
+    }
+    const fileHandle = await resolveFileHandle(assetDh, assetPath);
+    const file = await fileHandle.getFile();
+    return { success: true, asset: file };
   }
 }
