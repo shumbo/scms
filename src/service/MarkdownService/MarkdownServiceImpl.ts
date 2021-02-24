@@ -7,6 +7,7 @@ import replaceAsync from "string-replace-async";
 import { MarkdownService } from "../../domain/service/MarkdownService";
 import { ProjectRepository } from "../../domain/repository/ProjectRepository";
 import { TYPES } from "../../TYPES";
+import { Cache } from "../../helpers/Cache/cache";
 
 import { image_with_prefix } from "./image";
 
@@ -45,6 +46,12 @@ export class MarkdownServiceImpl implements MarkdownService {
     );
     this.matchRegExp = new RegExp(`${this.prefix}[^\\"]*`, "g");
   }
+  private assetCache = new Cache<string>({
+    ttl: 300 * 1000,
+    onDelete: async (value) => {
+      URL.revokeObjectURL(value);
+    },
+  });
   async render(originalText: string): Promise<string> {
     const m = matter(originalText);
     const frontmatterMd =
@@ -52,15 +59,16 @@ export class MarkdownServiceImpl implements MarkdownService {
         ? "```json\n" + JSON.stringify(m.data, null, 2) + "\n```\n"
         : "";
     const renderedText = this.md.render(frontmatterMd + m.content);
-    console.log(renderedText);
-
     return replaceAsync(renderedText, this.matchRegExp, async (match) => {
       const path = match.replace(this.prefix, ""); // remove prefix
-      const getAssetResult = await this.projectRepository.getAsset(path);
-      if (!getAssetResult.success) {
-        throw new Error("One of the asset failed to load");
-      }
-      return URL.createObjectURL(getAssetResult.asset);
+      const url = await this.assetCache.getDefault(path, async (p) => {
+        const result = await this.projectRepository.getAsset(p);
+        if (!result.success) {
+          return "ASSET LOAD ERROR";
+        }
+        return URL.createObjectURL(result.asset);
+      });
+      return url;
     });
   }
 }
