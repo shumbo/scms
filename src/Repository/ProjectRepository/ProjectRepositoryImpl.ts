@@ -160,7 +160,12 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     } catch {
       return { success: false, reason: "NO_MARKDOWN_DIRECTORY" };
     }
-    const fileHandle = await resolveFileHandle(markdownDh, filename);
+    let fileHandle: FileSystemFileHandle;
+    try {
+      fileHandle = await resolveFileHandle(markdownDh, filename);
+    } catch {
+      return { success: false, reason: "NO_SUCH_FILE" };
+    }
     const file = await fileHandle.getFile();
     return { success: true, post: file };
   }
@@ -179,7 +184,12 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     } catch {
       return { success: false, reason: "NO_ASSET_DIRECTORY" };
     }
-    const fileHandle = await resolveFileHandle(assetDh, assetPath);
+    let fileHandle: FileSystemFileHandle;
+    try {
+      fileHandle = await resolveFileHandle(assetDh, assetPath);
+    } catch {
+      return { success: false, reason: "NO_SUCH_FILE" };
+    }
     const file = await fileHandle.getFile();
     return { success: true, asset: file };
   }
