@@ -33,6 +33,13 @@ export class ProjectInteractor implements ProjectUseCase {
   getPost(filepath: string): Promise<ProjectUseCase.GetPostResult> {
     return this.projectRepository.getPost(filepath);
   }
+  savePost(
+    filepath: string,
+    content: string
+  ): Promise<ProjectUseCase.SavePostResult> {
+    return this.projectRepository.savePost(filepath, content);
+  }
+
   async render(originalText: string): Promise<string> {
     return this.markdownService.render(originalText);
   }

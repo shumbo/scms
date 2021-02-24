@@ -7,6 +7,10 @@ export interface ProjectRepository {
   getCurrentProject(): Promise<ProjectRepository.GetCurrentProjectResult>;
   listPost(): Promise<ProjectRepository.ListPostResult>;
   getPost(filename: string): Promise<ProjectRepository.GetPostResult>;
+  savePost(
+    filename: string,
+    content: string
+  ): Promise<ProjectRepository.SavePostResult>;
   getAsset(assetPath: string): Promise<ProjectRepository.GetAssetResult>;
 }
 
@@ -46,6 +50,14 @@ export namespace ProjectRepository {
     | { success: true; post: File }
     | GetCurrentProjectError
     | GetPostError;
+  type SavePostError = {
+    success: false;
+    reason: "NO_OPENED_PROJECT" | "NO_MARKDOWN_DIRECTORY" | "NO_SUCH_FILE";
+  };
+  export type SavePostResult =
+    | { success: true }
+    | GetCurrentProjectError
+    | SavePostError;
   type GetAssetError = {
     success: false;
     reason: "NO_OPENED_PROJECT" | "NO_ASSET_DIRECTORY" | "NO_SUCH_FILE";

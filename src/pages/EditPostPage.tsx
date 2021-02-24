@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { Fragment, useEffect, useState, VFC } from "react";
 import { useRouteMatch } from "react-router";
 
@@ -10,6 +11,7 @@ export const EditPostPage: VFC = () => {
   const {
     params: { filename },
   } = useRouteMatch<{ filename: string }>();
+  const toast = useToast();
   const projectUseCase = useInjection<ProjectUseCase>(TYPES.ProjectUseCase);
   const [value, setValue] = useState<string>("");
   const [postFile, setPostFile] = useState<File>();
@@ -42,7 +44,18 @@ export const EditPostPage: VFC = () => {
         filename={filename}
         value={value}
         onChange={setValue}
-        onSave={async () => {}}
+        onSave={async () => {
+          const result = await projectUseCase.savePost(filename, value);
+          if (result.success) {
+            toast({
+              title: "Saved",
+              description: "Your changes have been saved to the disk",
+              status: "success",
+              duration: 2000,
+              isClosable: true,
+            });
+          }
+        }}
         render={(originalText) => projectUseCase.render(originalText)}
       />
     </Fragment>
