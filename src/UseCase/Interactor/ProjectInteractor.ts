@@ -39,8 +39,10 @@ export class ProjectInteractor implements ProjectUseCase {
   ): Promise<ProjectUseCase.SavePostResult> {
     return this.projectRepository.savePost(filepath, content);
   }
-
   async render(originalText: string): Promise<string> {
     return this.markdownService.render(originalText);
+  }
+  putAsset(file: File): Promise<ProjectUseCase.PutAssetResult> {
+    return this.projectRepository.putAsset(file);
   }
 }

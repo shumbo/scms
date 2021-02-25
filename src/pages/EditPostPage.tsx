@@ -57,6 +57,18 @@ export const EditPostPage: VFC = () => {
           }
         }}
         render={(originalText) => projectUseCase.render(originalText)}
+        putImage={async (file) => {
+          const result = await projectUseCase.putAsset(file);
+          if (!result.success) {
+            toast({
+              title: "Error",
+              description: "We could not save the image you selected ;(",
+              status: "error",
+            });
+            return null;
+          }
+          return `/${file.name}`;
+        }}
       />
     </Fragment>
   );

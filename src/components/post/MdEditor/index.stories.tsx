@@ -16,4 +16,8 @@ const Template: Story<MdEditorProps> = (args) => {
 };
 
 export const Sample = Template.bind({});
-Sample.args = {};
+Sample.args = {
+  async putImage(file: File) {
+    return `https://placehold.jp/24/eeeeee/999999/360x270.png?text=${file.name}`;
+  },
+};

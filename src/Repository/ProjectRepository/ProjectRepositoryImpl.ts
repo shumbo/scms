@@ -225,4 +225,29 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     const file = await fileHandle.getFile();
     return { success: true, asset: file };
   }
+  async putAsset(content: File): Promise<ProjectRepository.PutAssetResult> {
+    const currentProjectResult = await this.getCurrentProject();
+    if (!currentProjectResult.success) {
+      return currentProjectResult;
+    }
+    const project = currentProjectResult.project;
+    if (!this.dh) {
+      return { success: false, reason: "NO_OPENED_PROJECT" };
+    }
+    let assetDh: FileSystemDirectoryHandle;
+    try {
+      assetDh = await resolveDirectoryHandle(this.dh, project.assetDirectory);
+    } catch {
+      return { success: false, reason: "NO_ASSET_DIRECTORY" };
+    }
+    // TODO: Make sure there is no file with the same name
+    const fileHandle = await assetDh.getFileHandle(content.name, {
+      create: true,
+    });
+    const writable = await fileHandle.createWritable();
+    const buffer = await content.arrayBuffer();
+    await writable.write(buffer);
+    await writable.close();
+    return { success: true };
+  }
 }

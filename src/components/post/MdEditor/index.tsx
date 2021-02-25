@@ -2,9 +2,9 @@ import { Box, IconButton, Stack } from "@chakra-ui/react";
 import hljs from "highlight.js";
 import "highlight.js/styles/github-gist.css";
 import MarkdownIt from "markdown-it";
-import { VFC } from "react";
+import { ChangeEvent, useCallback, useRef, VFC } from "react";
 import { FaFileImage } from "react-icons/fa";
-import { defaultCommands, Editor } from "react-split-mde";
+import { defaultCommands, Editor, useProvider } from "react-split-mde";
 import matter from "gray-matter";
 
 import "wysiwyg.css";
@@ -35,9 +35,15 @@ export type MdEditorProps = {
   value: string;
   onChange(newValue: string): void;
   render?: (originalValue: string) => Promise<string>;
+  putImage: (file: File) => Promise<string | null>;
 };
 
-export const MdEditor: VFC<MdEditorProps> = ({ value, onChange, render }) => {
+export const MdEditor: VFC<MdEditorProps> = ({
+  value,
+  onChange,
+  render,
+  putImage,
+}) => {
   const renderFn =
     render ??
     (async (originalText) => {
@@ -48,22 +54,59 @@ export const MdEditor: VFC<MdEditorProps> = ({ value, onChange, render }) => {
           : "";
       return md.render(frontmatterMd + m.content);
     });
+
+  const [mdEmit, MdProvider] = useProvider();
+  const inputRef = useRef<HTMLInputElement>(null);
   return (
-    <Stack>
-      <Stack direction="row">
-        <IconButton aria-label="Add Image" icon={<FaFileImage />} />
-      </Stack>
-      <Box css={editorCss}>
-        <Box height="500px">
-          <Editor
-            previewClassName="wysiwyg"
-            value={value}
-            onChange={onChange}
-            commands={{ ...defaultCommands }}
-            parser={renderFn}
+    <MdProvider>
+      <Stack>
+        <input
+          hidden
+          type="file"
+          ref={inputRef}
+          onChange={useCallback(
+            async (ev: ChangeEvent<HTMLInputElement>) => {
+              if (!ev.target.files) {
+                return;
+              }
+              const file = ev.target.files[0];
+              if (!file) {
+                return;
+              }
+              // TODO: Insert loading text and replace later
+              const url = await putImage(file);
+              if (!url) {
+                return;
+              }
+              mdEmit({ type: "insert", text: `![](${url})` });
+            },
+            [putImage, mdEmit]
+          )}
+        />
+        <Stack direction="row">
+          <IconButton
+            aria-label="Add Image"
+            icon={<FaFileImage />}
+            onClick={useCallback(() => {
+              if (!inputRef.current) {
+                return;
+              }
+              inputRef.current.click();
+            }, [])}
           />
+        </Stack>
+        <Box css={editorCss}>
+          <Box height="500px">
+            <Editor
+              previewClassName="wysiwyg"
+              value={value}
+              onChange={onChange}
+              commands={{ ...defaultCommands }}
+              parser={renderFn}
+            />
+          </Box>
         </Box>
-      </Box>
-    </Stack>
+      </Stack>
+    </MdProvider>
   );
 };

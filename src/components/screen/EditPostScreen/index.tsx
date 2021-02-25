@@ -18,6 +18,7 @@ export type EditPostScreenProps = {
   onChange(newValue: string): void;
   onSave(): Promise<void>;
   render(originalText: string): Promise<string>;
+  putImage: (file: File) => Promise<string | null>;
 };
 
 export const EditPostScreen: VFC<EditPostScreenProps> = ({
@@ -26,6 +27,7 @@ export const EditPostScreen: VFC<EditPostScreenProps> = ({
   value,
   filename,
   render,
+  putImage,
 }) => {
   return (
     <Box width="100%" p="16">
@@ -45,7 +47,12 @@ export const EditPostScreen: VFC<EditPostScreenProps> = ({
         </Button>
       </HStack>
       <Divider my="4" />
-      <MdEditor value={value} onChange={onChange} render={render} />
+      <MdEditor
+        value={value}
+        onChange={onChange}
+        render={render}
+        putImage={putImage}
+      />
     </Box>
   );
 };

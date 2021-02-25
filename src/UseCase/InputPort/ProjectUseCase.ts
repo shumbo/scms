@@ -11,6 +11,7 @@ export interface ProjectUseCase {
     content: string
   ): Promise<ProjectUseCase.SavePostResult>;
   render(originalText: string): Promise<string>;
+  putAsset(file: File): Promise<ProjectUseCase.PutAssetResult>;
 }
 export namespace ProjectUseCase {
   export type OpenResult =
@@ -57,5 +58,16 @@ export namespace ProjectUseCase {
           | "NO_CONFIG_FILE"
           | "INVALID_CONFIG_FILE"
           | "NO_SUCH_FILE";
+      };
+  export type PutAssetResult =
+    | { success: true }
+    | {
+        success: false;
+        reason:
+          | "NO_OPENED_PROJECT"
+          | "NO_ASSET_DIRECTORY"
+          | "INVALID_CONFIG_FILE"
+          | "NO_CONFIG_FILE"
+          | "NO_SAVED_DIRECTORY";
       };
 }

@@ -12,6 +12,7 @@ export interface ProjectRepository {
     content: string
   ): Promise<ProjectRepository.SavePostResult>;
   getAsset(assetPath: string): Promise<ProjectRepository.GetAssetResult>;
+  putAsset(content: File): Promise<ProjectRepository.PutAssetResult>;
 }
 
 export namespace ProjectRepository {
@@ -66,4 +67,12 @@ export namespace ProjectRepository {
     | { success: true; asset: File }
     | GetAssetError
     | GetCurrentProjectError;
+  type PutAssetError = {
+    success: false;
+    reason: "NO_OPENED_PROJECT" | "NO_ASSET_DIRECTORY";
+  };
+  export type PutAssetResult =
+    | { success: true }
+    | GetCurrentProjectError
+    | PutAssetError;
 }
