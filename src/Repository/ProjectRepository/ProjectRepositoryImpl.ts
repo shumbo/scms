@@ -201,6 +201,40 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     await writable.close();
     return { success: true };
   }
+  async createPost(
+    filepath: string,
+    content: string
+  ): Promise<ProjectRepository.CreatePostResult> {
+    const currentProjectResult = await this.getCurrentProject();
+    if (!currentProjectResult.success) {
+      return currentProjectResult;
+    }
+    const project = currentProjectResult.project;
+    if (!this.dh) {
+      return { success: false, reason: "NO_OPENED_PROJECT" };
+    }
+    let markdownDh: FileSystemDirectoryHandle;
+    try {
+      markdownDh = await resolveDirectoryHandle(
+        this.dh,
+        project.markdownDirectory
+      );
+    } catch {
+      return { success: false, reason: "NO_MARKDOWN_DIRECTORY" };
+    }
+    let fileHandle: FileSystemFileHandle;
+    try {
+      fileHandle = await resolveFileHandle(markdownDh, filepath, {
+        create: true,
+      });
+    } catch {
+      return { success: false, reason: "ALREADY_EXISTS" };
+    }
+    const writable = await fileHandle.createWritable();
+    await writable.write(content);
+    await writable.close();
+    return { success: true };
+  }
   async getAsset(assetPath: string): Promise<ProjectRepository.GetAssetResult> {
     const currentProjectResult = await this.getCurrentProject();
     if (!currentProjectResult.success) {

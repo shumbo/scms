@@ -3,7 +3,8 @@ import { splitPath } from "./splitPath";
 
 export async function resolveFileHandle(
   dh: FileSystemDirectoryHandle,
-  path: string
+  path: string,
+  options?: FileSystemGetFileOptions
 ): Promise<FileSystemFileHandle> {
   const pathArr = splitPath(path);
   const [filename] = pathArr.slice(pathArr.length - 1);
@@ -12,5 +13,5 @@ export async function resolveFileHandle(
   }
   const parentDirPath = pathArr.slice(0, pathArr.length - 1);
   const parentDir = await resolveDirectoryHandle(dh, parentDirPath.join("/"));
-  return parentDir.getFileHandle(filename);
+  return parentDir.getFileHandle(filename, options);
 }

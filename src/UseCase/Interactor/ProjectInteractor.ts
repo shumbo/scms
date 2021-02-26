@@ -33,6 +33,13 @@ export class ProjectInteractor implements ProjectUseCase {
   getPost(filepath: string): Promise<ProjectUseCase.GetPostResult> {
     return this.projectRepository.getPost(filepath);
   }
+  createPost(
+    filepath: string,
+    title: string
+  ): Promise<ProjectUseCase.CreatePostResult> {
+    const content = `${title}\n---\n\n\n`;
+    return this.projectRepository.createPost(filepath, content);
+  }
   savePost(
     filepath: string,
     content: string

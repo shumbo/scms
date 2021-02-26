@@ -6,6 +6,10 @@ export interface ProjectUseCase {
   create(project: Project): Promise<ProjectUseCase.CreateResult>;
   listPost(): Promise<ProjectUseCase.ListPostResult>;
   getPost(filepath: string): Promise<ProjectUseCase.GetPostResult>;
+  createPost(
+    filepath: string,
+    title: string
+  ): Promise<ProjectUseCase.CreatePostResult>;
   savePost(
     filepath: string,
     content: string
@@ -46,6 +50,18 @@ export namespace ProjectUseCase {
           | "NO_CONFIG_FILE"
           | "INVALID_CONFIG_FILE"
           | "NO_SUCH_FILE";
+      };
+  export type CreatePostResult =
+    | { success: true }
+    | {
+        success: false;
+        reason:
+          | "NO_OPENED_PROJECT"
+          | "NO_MARKDOWN_DIRECTORY"
+          | "NO_SAVED_DIRECTORY"
+          | "NO_CONFIG_FILE"
+          | "INVALID_CONFIG_FILE"
+          | "ALREADY_EXISTS";
       };
   export type SavePostResult =
     | { success: true }

@@ -11,7 +11,7 @@ import {
   ModalFooter,
 } from "@chakra-ui/modal";
 import { RefObject, useRef, VFC } from "react";
-import { useFormContext } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { useLoading } from "../../../hooks/useLoading";
 
@@ -19,11 +19,12 @@ export type CreatePostAlertProps = {
   isOpen: boolean;
   finalFocusRef?: RefObject<HTMLButtonElement>;
   onClose(): void;
-  onCreate(filename: string): Promise<void>;
+  onCreate(filename: string, title: string): Promise<void>;
 };
 
 type CreatePostFormData = {
   filename: string;
+  title: string;
 };
 
 export const CreatePostAlert: VFC<CreatePostAlertProps> = ({
@@ -32,11 +33,11 @@ export const CreatePostAlert: VFC<CreatePostAlertProps> = ({
   onClose,
   onCreate,
 }) => {
-  const { register, handleSubmit } = useFormContext<CreatePostFormData>();
+  const { register, handleSubmit } = useForm<CreatePostFormData>();
   const [isLoading, asyncTask] = useLoading();
   const initialRef = useRef<HTMLInputElement | null>(null);
   const onSubmit = (values: CreatePostFormData) => {
-    asyncTask(onCreate(values.filename));
+    asyncTask(onCreate(values.filename, values.title));
   };
   return (
     <Modal
@@ -61,6 +62,15 @@ export const CreatePostAlert: VFC<CreatePostAlertProps> = ({
                   initialRef.current = e;
                 }}
                 placeholder="my-new-post.md"
+              />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Title</FormLabel>
+              <Input
+                name="title"
+                required
+                ref={register}
+                placeholder="My first blog post"
               />
             </FormControl>
           </ModalBody>

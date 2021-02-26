@@ -11,6 +11,10 @@ export interface ProjectRepository {
     filename: string,
     content: string
   ): Promise<ProjectRepository.SavePostResult>;
+  createPost(
+    filename: string,
+    content: string
+  ): Promise<ProjectRepository.CreatePostResult>;
   getAsset(assetPath: string): Promise<ProjectRepository.GetAssetResult>;
   putAsset(content: File): Promise<ProjectRepository.PutAssetResult>;
 }
@@ -59,6 +63,14 @@ export namespace ProjectRepository {
     | { success: true }
     | GetCurrentProjectError
     | SavePostError;
+  type CreatePostError = {
+    success: false;
+    reason: "NO_OPENED_PROJECT" | "NO_MARKDOWN_DIRECTORY" | "ALREADY_EXISTS";
+  };
+  export type CreatePostResult =
+    | { success: true }
+    | GetCurrentProjectError
+    | CreatePostError;
   type GetAssetError = {
     success: false;
     reason: "NO_OPENED_PROJECT" | "NO_ASSET_DIRECTORY" | "NO_SUCH_FILE";
