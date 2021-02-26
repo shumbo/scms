@@ -252,7 +252,8 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     }
     let fileHandle: FileSystemFileHandle;
     try {
-      fileHandle = await resolveFileHandle(assetDh, assetPath);
+      // asset path is URL encoded and needs to be decoded to reach the file
+      fileHandle = await resolveFileHandle(assetDh, decodeURI(assetPath));
     } catch {
       return { success: false, reason: "NO_SUCH_FILE" };
     }
@@ -282,6 +283,6 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     const buffer = await content.arrayBuffer();
     await writable.write(buffer);
     await writable.close();
-    return { success: true };
+    return { success: true, url: encodeURI(`/${content.name}`) };
   }
 }

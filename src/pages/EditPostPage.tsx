@@ -67,7 +67,7 @@ export const EditPostPage: VFC = () => {
             });
             return null;
           }
-          return `/${file.name}`;
+          return encodeURI(`/${file.name}`);
         }}
       />
     </Fragment>

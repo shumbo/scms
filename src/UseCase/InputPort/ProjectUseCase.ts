@@ -76,7 +76,7 @@ export namespace ProjectUseCase {
           | "NO_SUCH_FILE";
       };
   export type PutAssetResult =
-    | { success: true }
+    | { success: true; url: string }
     | {
         success: false;
         reason:

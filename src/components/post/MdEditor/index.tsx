@@ -64,6 +64,7 @@ export const MdEditor: VFC<MdEditorProps> = ({
           hidden
           type="file"
           ref={inputRef}
+          accept="image/*"
           onChange={useCallback(
             async (ev: ChangeEvent<HTMLInputElement>) => {
               if (!ev.target.files) {
@@ -78,7 +79,10 @@ export const MdEditor: VFC<MdEditorProps> = ({
               if (!url) {
                 return;
               }
-              mdEmit({ type: "insert", text: `![](${url})` });
+              mdEmit({
+                type: "insert",
+                text: `![${file.name}](${url})`,
+              });
             },
             [putImage, mdEmit]
           )}
@@ -96,7 +100,7 @@ export const MdEditor: VFC<MdEditorProps> = ({
           />
         </Stack>
         <Box css={editorCss}>
-          <Box height="500px">
+          <Box height="80vh">
             <Editor
               previewClassName="wysiwyg"
               value={value}

@@ -84,7 +84,7 @@ export namespace ProjectRepository {
     reason: "NO_OPENED_PROJECT" | "NO_ASSET_DIRECTORY";
   };
   export type PutAssetResult =
-    | { success: true }
+    | { success: true; url: string }
     | GetCurrentProjectError
     | PutAssetError;
 }
