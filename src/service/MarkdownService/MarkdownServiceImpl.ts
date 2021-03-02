@@ -67,7 +67,7 @@ export class MarkdownServiceImpl implements MarkdownService {
         if (!result.success) {
           return "ASSET LOAD ERROR";
         }
-        return URL.createObjectURL(result.asset);
+        return URL.createObjectURL(result.asset.file);
       });
       return url;
     });
