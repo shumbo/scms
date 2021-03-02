@@ -6,28 +6,32 @@ import { CreatePostAlert } from "../components/screen/CreatePostAlert";
 import { PostTableScreen } from "../components/screen/PostTableScreen";
 import { useInjection } from "../context/Inversify";
 import { Post } from "../domain/model/Post/Post";
+import { useProject } from "../hooks/useProject";
 import { TYPES } from "../TYPES";
-import { ProjectUseCase } from "../UseCase/InputPort/ProjectUseCase";
+import { PostUseCase } from "../UseCase/InputPort/PostUseCase";
 
 export const ProjectPostTablePage: VFC = () => {
-  const projectUseCase = useInjection<ProjectUseCase>(TYPES.ProjectUseCase);
+  const [project] = useProject();
+  const postUseCase = useInjection<PostUseCase>(TYPES.PostUseCase);
   const [posts, setPosts] = useState<Post[] | null>(null);
   const toast = useToast();
   const history = useHistory();
   useEffect(() => {
     let isSubscribed = true;
-    projectUseCase.listPost().then((result) => {
-      if (!isSubscribed) {
+    (async () => {
+      if (!project) {
         return;
       }
-      if (result.success) {
-        setPosts(result.posts);
-      } else {
-        console.error(result);
+      const postsResult = await postUseCase.list(project);
+      if (!isSubscribed || !postsResult.success) {
+        return;
       }
-    });
-    return () => (isSubscribed = false);
-  }, [projectUseCase]);
+      setPosts(postsResult.posts);
+    })();
+    return () => {
+      isSubscribed = false;
+    };
+  }, [postUseCase, project]);
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
@@ -48,8 +52,11 @@ export const ProjectPostTablePage: VFC = () => {
           setIsCreateOpen(false);
         }}
         onCreate={async (filename, title) => {
+          if (!project) {
+            return;
+          }
           try {
-            await projectUseCase.createPost(filename, title);
+            await postUseCase.create(project, filename, title);
             toast({
               title: "Post Created",
               description: "New file has been created",

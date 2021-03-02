@@ -20,13 +20,13 @@ export const PostTable: VFC<PostTableProps> = ({ posts, onEdit }) => {
       </Thead>
       <Tbody>
         {posts.map((post) => (
-          <Tr key={post.filename}>
-            <Td>{post.filename}</Td>
+          <Tr key={post.filepath}>
+            <Td>{post.filepath}</Td>
             <Td>
               <Button
                 variant="outline"
                 colorScheme="purple"
-                onClick={() => onEdit(post.filename)}
+                onClick={() => onEdit(post.filepath)}
               >
                 Edit
               </Button>

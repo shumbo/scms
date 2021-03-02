@@ -1,29 +1,62 @@
 import { useToast } from "@chakra-ui/toast";
-import { useCallback, VFC } from "react";
-import { useHistory } from "react-router";
+import { useCallback, useEffect, useMemo, useState, VFC } from "react";
+import { useHistory, useLocation } from "react-router";
 
 import { CreateProjectScreen } from "../components/screen/CreateProjectScreen";
 import { useInjection } from "../context/Inversify";
-import { Project } from "../domain/model/Project/project";
+import { listDirectories } from "../helpers/FileSystem/listDirectories";
 import { TYPES } from "../TYPES";
 import { ProjectUseCase } from "../UseCase/InputPort/ProjectUseCase";
 
 export const CreateProjectPage: VFC = () => {
   const history = useHistory();
+  const location = useLocation();
   const projectUseCase = useInjection<ProjectUseCase>(TYPES.ProjectUseCase);
   const toast = useToast();
+  const dh = useMemo(() => {
+    if (!location.state) {
+      return null;
+    }
+    const state = location.state as { dh?: FileSystemDirectoryHandle };
+    if (!state.dh) {
+      return null;
+    }
+    return state.dh;
+  }, [location]);
+  const [directories, setDirectories] = useState<string[] | null>(null);
+  useEffect(() => {
+    if (dh === null) {
+      history.push("/");
+      return;
+    }
+    let subscribed = true;
+    listDirectories(dh).then((dirs) => {
+      if (subscribed) {
+        setDirectories(
+          dirs.filter(
+            (dir) => !dir.includes("node_modules") && !dir.includes(".git")
+          )
+        );
+      }
+    });
+    return () => {
+      subscribed = false;
+    };
+  }, [dh, history]);
   return (
     <CreateProjectScreen
+      directories={directories ?? []}
       onSubmit={useCallback(
         async (values) => {
-          const result = await projectUseCase.create(
-            new Project(
-              values.name,
-              values["markdown-directory"],
-              values["asset-directory"],
-              values["asset-serving-path"]
-            )
-          );
+          if (!dh) {
+            return;
+          }
+          const result = await projectUseCase.create(dh, {
+            name: values.name,
+            markdownDirectory: values["markdown-directory"],
+            assetDirectory: values["asset-directory"],
+            assetServingPath: values["asset-serving-path"],
+          });
           if (result.success) {
             toast({
               status: "success",
@@ -41,19 +74,10 @@ export const CreateProjectPage: VFC = () => {
                     "We couldn't save a project file in a selected directory.",
                 });
                 break;
-              case "NO_OPENED_DIRECTORY":
-                toast({
-                  status: "warning",
-                  title: "No Selected Directory",
-                  description:
-                    "You need to open a directory before you create a project.",
-                });
-                history.push("/");
-                break;
             }
           }
         },
-        [toast, projectUseCase, history]
+        [toast, projectUseCase, history, dh]
       )}
     />
   );

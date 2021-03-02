@@ -1,5 +1,5 @@
 import { VStack } from "@chakra-ui/layout";
-import { FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { FormControl, FormLabel, Input, Select } from "@chakra-ui/react";
 import { VFC } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -10,7 +10,13 @@ export type ProjectConfigFormData = {
   "asset-serving-path": string;
 };
 
-export const ProjectConfigForm: VFC = () => {
+export type ProjectConfigFormProps = {
+  directories: string[];
+};
+
+export const ProjectConfigForm: VFC<ProjectConfigFormProps> = ({
+  directories,
+}) => {
   const { register } = useFormContext<ProjectConfigFormData>();
   return (
     <VStack>
@@ -25,21 +31,31 @@ export const ProjectConfigForm: VFC = () => {
       </FormControl>
       <FormControl isRequired>
         <FormLabel>Markdown Directory</FormLabel>
-        <Input
-          type="text"
+        <Select
+          placeholder="Select Markdown Directory"
           name="markdown-directory"
-          placeholder="/articles"
           ref={register({ required: true })}
-        />
+        >
+          {directories.map((dir) => (
+            <option value={dir} key={dir}>
+              {dir}
+            </option>
+          ))}
+        </Select>
       </FormControl>
       <FormControl isRequired>
         <FormLabel>Asset Directory</FormLabel>
-        <Input
-          type="text"
+        <Select
+          placeholder="Select Asset Directory"
           name="asset-directory"
-          placeholder="/public/assets"
           ref={register({ required: true })}
-        />
+        >
+          {directories.map((dir) => (
+            <option value={dir} key={dir}>
+              {dir}
+            </option>
+          ))}
+        </Select>
       </FormControl>
       <FormControl isRequired>
         <FormLabel>Asset Serving Path</FormLabel>

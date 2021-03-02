@@ -4,7 +4,10 @@ import { useRouteMatch } from "react-router";
 
 import { EditPostScreen } from "../components/screen/EditPostScreen";
 import { useInjection } from "../context/Inversify";
+import { Post } from "../domain/model/Post/Post";
+import { useProject } from "../hooks/useProject";
 import { TYPES } from "../TYPES";
+import { PostUseCase } from "../UseCase/InputPort/PostUseCase";
 import { ProjectUseCase } from "../UseCase/InputPort/ProjectUseCase";
 
 export const EditPostPage: VFC = () => {
@@ -12,24 +15,23 @@ export const EditPostPage: VFC = () => {
     params: { filename },
   } = useRouteMatch<{ filename: string }>();
   const toast = useToast();
+  const [project] = useProject();
   const projectUseCase = useInjection<ProjectUseCase>(TYPES.ProjectUseCase);
+  const postUseCase = useInjection<PostUseCase>(TYPES.PostUseCase);
   const [value, setValue] = useState<string>("");
-  const [postFile, setPostFile] = useState<File>();
+  const [post, setPost] = useState<Post>();
   useEffect(() => {
     let isSubscribed = true;
-    projectUseCase.getPost(filename).then((result) => {
+    if (!project) {
+      return;
+    }
+    postUseCase.get(project, filename).then((result) => {
       if (!isSubscribed) {
         return;
       }
       if (result.success) {
-        setPostFile(result.post);
-        result.post.text().then((str) => {
-          if (!isSubscribed) {
-            return;
-          }
-          console.log("set value");
-          setValue(str);
-        });
+        setPost(result.post);
+        setValue(result.post.content);
       } else {
         console.error(result.reason);
       }
@@ -37,7 +39,10 @@ export const EditPostPage: VFC = () => {
     return () => {
       isSubscribed = false;
     };
-  }, [filename, projectUseCase]);
+  }, [filename, postUseCase, project]);
+  if (!project || !post) {
+    return null;
+  }
   return (
     <Fragment>
       <EditPostScreen
@@ -45,7 +50,7 @@ export const EditPostPage: VFC = () => {
         value={value}
         onChange={setValue}
         onSave={async () => {
-          const result = await projectUseCase.savePost(filename, value);
+          const result = await postUseCase.save(project, post, value);
           if (result.success) {
             toast({
               title: "Saved",
@@ -56,9 +61,9 @@ export const EditPostPage: VFC = () => {
             });
           }
         }}
-        render={(originalText) => projectUseCase.render(originalText)}
+        render={(originalText) => projectUseCase.render(project, originalText)}
         putImage={async (file) => {
-          const result = await projectUseCase.putAsset(file);
+          const result = await projectUseCase.putAsset(project, file);
           if (!result.success) {
             toast({
               title: "Error",

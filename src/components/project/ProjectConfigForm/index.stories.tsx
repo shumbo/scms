@@ -4,7 +4,7 @@ import { FC, ReactNode, VFC } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { action } from "@storybook/addon-actions";
 
-import { ProjectConfigForm } from ".";
+import { ProjectConfigForm, ProjectConfigFormProps } from ".";
 
 const StorybookFormProvider: VFC<{ children: ReactNode }> = ({ children }) => {
   const methods = useForm();
@@ -33,5 +33,16 @@ const meta: Meta = {
 };
 export default meta;
 
-const Template: Story = () => <ProjectConfigForm />;
+const Template: Story<ProjectConfigFormProps> = (args) => (
+  <ProjectConfigForm {...args} />
+);
 export const Default = Template.bind({});
+Default.args = {
+  directories: [
+    "/static",
+    "/themes",
+    "/content",
+    "/content/posts",
+    "/content/pages",
+  ],
+};

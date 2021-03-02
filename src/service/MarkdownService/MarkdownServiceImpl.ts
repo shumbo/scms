@@ -5,9 +5,10 @@ import MarkdownIt from "markdown-it";
 import replaceAsync from "string-replace-async";
 
 import { MarkdownService } from "../../domain/service/MarkdownService";
-import { ProjectRepository } from "../../domain/repository/ProjectRepository";
 import { TYPES } from "../../TYPES";
 import { Cache } from "../../helpers/Cache/cache";
+import { AssetRepository } from "../../domain/repository/AssetRepository";
+import { Project } from "../../domain/model/Project/project";
 
 import { image_with_prefix } from "./image";
 
@@ -17,8 +18,8 @@ export class MarkdownServiceImpl implements MarkdownService {
   private matchRegExp: RegExp;
   private prefix = "SCMS_IMAGE_";
   constructor(
-    @inject(TYPES.ProjectRepository)
-    private projectRepository: ProjectRepository
+    @inject(TYPES.AssetRepository)
+    private assetRepository: AssetRepository
   ) {
     this.md = MarkdownIt({
       highlight: function (str, lang) {
@@ -52,7 +53,7 @@ export class MarkdownServiceImpl implements MarkdownService {
       URL.revokeObjectURL(value);
     },
   });
-  async render(originalText: string): Promise<string> {
+  async render(project: Project, originalText: string): Promise<string> {
     const m = matter(originalText);
     const frontmatterMd =
       Object.keys(m.data).length > 0
@@ -62,7 +63,7 @@ export class MarkdownServiceImpl implements MarkdownService {
     return replaceAsync(renderedText, this.matchRegExp, async (match) => {
       const path = match.replace(this.prefix, ""); // remove prefix
       const url = await this.assetCache.getDefault(path, async (p) => {
-        const result = await this.projectRepository.getAsset(p);
+        const result = await this.assetRepository.get(project, p);
         if (!result.success) {
           return "ASSET LOAD ERROR";
         }

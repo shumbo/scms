@@ -12,6 +12,12 @@ import { ProjectRepository } from "./domain/repository/ProjectRepository";
 import { ProjectRepositoryImpl } from "./Repository/ProjectRepository/ProjectRepositoryImpl";
 import { MarkdownService } from "./domain/service/MarkdownService";
 import { MarkdownServiceImpl } from "./service/MarkdownService/MarkdownServiceImpl";
+import { PostUseCase } from "./UseCase/InputPort/PostUseCase";
+import { PostInteractor } from "./UseCase/Interactor/PostInteractor";
+import { PostRepository } from "./domain/repository/PostRepository";
+import { PostRepositoryImpl } from "./Repository/PostRepository/PostRepositoryImpl";
+import { AssetRepository } from "./domain/repository/AssetRepository";
+import { AssetRepositoryImpl } from "./Repository/AssetRepository/AssetRepositoryImpl";
 
 export const container = new Container();
 
@@ -24,6 +30,10 @@ container
   .bind<ProjectUseCase>(TYPES.ProjectUseCase)
   .to(ProjectInteractor)
   .inSingletonScope();
+container
+  .bind<PostUseCase>(TYPES.PostUseCase)
+  .to(PostInteractor)
+  .inSingletonScope();
 
 // Repository
 container
@@ -32,6 +42,14 @@ container
 container
   .bind<ProjectRepository>(TYPES.ProjectRepository)
   .to(ProjectRepositoryImpl)
+  .inSingletonScope();
+container
+  .bind<PostRepository>(TYPES.PostRepository)
+  .to(PostRepositoryImpl)
+  .inSingletonScope();
+container
+  .bind<AssetRepository>(TYPES.AssetRepository)
+  .to(AssetRepositoryImpl)
   .inSingletonScope();
 
 // Service

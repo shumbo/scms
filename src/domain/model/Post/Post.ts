@@ -1,6 +1,8 @@
 export class Post {
-  public readonly filename: string;
-  constructor(filename: string) {
-    this.filename = filename;
+  public readonly filepath: string;
+  public readonly content: string;
+  constructor(filepath: string, content: string) {
+    this.filepath = filepath;
+    this.content = content;
   }
 }

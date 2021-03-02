@@ -1,10 +1,15 @@
-import { Post } from "../model/Post/Post";
-import { Project } from "../model/Project/project";
+import { Result } from "../../helpers/Types/Result";
+import { Project, ProjectConfig } from "../model/Project/project";
 
 export interface ProjectRepository {
   open(): Promise<ProjectRepository.OpenResult>;
-  create(project: Project): Promise<ProjectRepository.CreateResult>;
+  create(
+    dh: FileSystemDirectoryHandle,
+    config: ProjectConfig
+  ): Promise<ProjectRepository.CreateResult>;
   getCurrentProject(): Promise<ProjectRepository.GetCurrentProjectResult>;
+  hasOpenedProject(): Promise<boolean>;
+  /*
   listPost(): Promise<ProjectRepository.ListPostResult>;
   getPost(filename: string): Promise<ProjectRepository.GetPostResult>;
   savePost(
@@ -17,28 +22,47 @@ export interface ProjectRepository {
   ): Promise<ProjectRepository.CreatePostResult>;
   getAsset(assetPath: string): Promise<ProjectRepository.GetAssetResult>;
   putAsset(content: File): Promise<ProjectRepository.PutAssetResult>;
+  */
 }
 
 export namespace ProjectRepository {
+  type LoadProjectError =
+    | {
+        reason:
+          | "INVALID_CONFIG_FILE"
+          | "NO_MARKDOWN_DIRECTORY"
+          | "NO_ASSET_DIRECTORY";
+      }
+    | { reason: "NO_CONFIG_FILE"; directoryHandle: FileSystemDirectoryHandle };
+
   type OpenError =
     | {
-        success: false;
-        reason: "NO_DIRECTORY_SELECTED" | "INVALID_CONFIG_FILE";
+        reason: "NO_DIRECTORY_SELECTED";
       }
-    | { success: false; reason: "NO_CONFIG_FILE"; directoryName: string };
-  export type OpenResult = { success: true; project: Project } | OpenError;
+    | LoadProjectError;
+
+  export type OpenResult = Result<{ project: Project }, OpenError>;
+
   type CreateError = {
     success: false;
-    reason: "NO_OPENED_DIRECTORY" | "ERROR_CREATE_FILE";
+    reason:
+      | "NO_MARKDOWN_DIRECTORY"
+      | "NO_ASSET_DIRECTORY"
+      | "ERROR_CREATE_FILE";
   };
-  export type CreateResult = { success: true } | CreateError;
-  type GetCurrentProjectError = {
-    success: false;
-    reason: "NO_SAVED_DIRECTORY" | "NO_CONFIG_FILE" | "INVALID_CONFIG_FILE";
-  };
-  export type GetCurrentProjectResult =
-    | { success: true; project: Project }
-    | GetCurrentProjectError;
+  export type CreateResult = { success: true; project: Project } | CreateError;
+
+  type GetCurrentProjectError =
+    | {
+        reason: "NO_SAVED_DIRECTORY";
+      }
+    | LoadProjectError;
+  export type GetCurrentProjectResult = Result<
+    { project: Project },
+    GetCurrentProjectError
+  >;
+
+  /*
   type ListPostError = {
     success: false;
     reason: "NO_OPENED_PROJECT" | "NO_MARKDOWN_DIRECTORY";
@@ -47,6 +71,7 @@ export namespace ProjectRepository {
     | { success: true; posts: Post[] }
     | GetCurrentProjectError
     | ListPostError;
+
   type GetPostError = {
     success: false;
     reason: "NO_OPENED_PROJECT" | "NO_MARKDOWN_DIRECTORY" | "NO_SUCH_FILE";
@@ -86,5 +111,5 @@ export namespace ProjectRepository {
   export type PutAssetResult =
     | { success: true; url: string }
     | GetCurrentProjectError
-    | PutAssetError;
+    | PutAssetError;*/
 }

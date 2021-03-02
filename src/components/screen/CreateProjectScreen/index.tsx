@@ -10,10 +10,12 @@ import {
 } from "../../project/ProjectConfigForm";
 
 export type CreateProjectScreenProps = {
+  directories: string[];
   onSubmit(project: ProjectConfigFormData): Promise<void>;
 };
 
 export const CreateProjectScreen: VFC<CreateProjectScreenProps> = ({
+  directories,
   onSubmit,
 }) => {
   const methods = useForm<ProjectConfigFormData>();
@@ -25,7 +27,7 @@ export const CreateProjectScreen: VFC<CreateProjectScreenProps> = ({
       <Box mt={4}>
         <FormProvider {...methods}>
           <form onSubmit={callback}>
-            <ProjectConfigForm />
+            <ProjectConfigForm directories={directories} />
             <HStack mt={4} justify="flex-end">
               <Button isLoading={loading} type="submit" colorScheme="purple">
                 Create Project

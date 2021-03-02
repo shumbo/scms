@@ -15,7 +15,7 @@ export const WelcomePage: VFC = () => {
   );
   const projectUseCase = useInjection<ProjectUseCase>(TYPES.ProjectUseCase);
 
-  const [directoryName, setDirectoryName] = useState("");
+  const [dh, setDh] = useState<FileSystemDirectoryHandle | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const cancelRef = useRef<HTMLButtonElement>(null);
 
@@ -31,7 +31,7 @@ export const WelcomePage: VFC = () => {
               case "NO_DIRECTORY_SELECTED":
                 break;
               case "NO_CONFIG_FILE":
-                setDirectoryName(openResult.directoryName);
+                setDh(openResult.directoryHandle);
                 setIsOpen(true);
                 break;
             }
@@ -47,10 +47,10 @@ export const WelcomePage: VFC = () => {
         onClose={useCallback(() => setIsOpen(false), [])}
         onCreate={useCallback(() => {
           setIsOpen(false);
-          history.push("/create-project");
-        }, [history])}
+          history.push("/create-project", { dh });
+        }, [history, dh])}
         cancelRef={cancelRef}
-        directoryName={directoryName}
+        directoryName={dh?.name ?? ""}
       />
     </Fragment>
   );
