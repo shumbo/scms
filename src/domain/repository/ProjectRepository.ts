@@ -7,22 +7,12 @@ export interface ProjectRepository {
     dh: FileSystemDirectoryHandle,
     config: ProjectConfig
   ): Promise<ProjectRepository.CreateResult>;
+  update(
+    dh: FileSystemDirectoryHandle,
+    config: ProjectConfig
+  ): Promise<ProjectRepository.UpdateResult>;
   getCurrentProject(): Promise<ProjectRepository.GetCurrentProjectResult>;
   hasOpenedProject(): Promise<boolean>;
-  /*
-  listPost(): Promise<ProjectRepository.ListPostResult>;
-  getPost(filename: string): Promise<ProjectRepository.GetPostResult>;
-  savePost(
-    filename: string,
-    content: string
-  ): Promise<ProjectRepository.SavePostResult>;
-  createPost(
-    filename: string,
-    content: string
-  ): Promise<ProjectRepository.CreatePostResult>;
-  getAsset(assetPath: string): Promise<ProjectRepository.GetAssetResult>;
-  putAsset(content: File): Promise<ProjectRepository.PutAssetResult>;
-  */
 }
 
 export namespace ProjectRepository {
@@ -52,6 +42,15 @@ export namespace ProjectRepository {
   };
   export type CreateResult = { success: true; project: Project } | CreateError;
 
+  type UpdateError = {
+    success: false;
+    reason:
+      | "NO_MARKDOWN_DIRECTORY"
+      | "NO_ASSET_DIRECTORY"
+      | "ERROR_UPDATE_FILE";
+  };
+  export type UpdateResult = { success: true; project: Project } | UpdateError;
+
   type GetCurrentProjectError =
     | {
         reason: "NO_SAVED_DIRECTORY";
@@ -61,55 +60,4 @@ export namespace ProjectRepository {
     { project: Project },
     GetCurrentProjectError
   >;
-
-  /*
-  type ListPostError = {
-    success: false;
-    reason: "NO_OPENED_PROJECT" | "NO_MARKDOWN_DIRECTORY";
-  };
-  export type ListPostResult =
-    | { success: true; posts: Post[] }
-    | GetCurrentProjectError
-    | ListPostError;
-
-  type GetPostError = {
-    success: false;
-    reason: "NO_OPENED_PROJECT" | "NO_MARKDOWN_DIRECTORY" | "NO_SUCH_FILE";
-  };
-  export type GetPostResult =
-    | { success: true; post: File }
-    | GetCurrentProjectError
-    | GetPostError;
-  type SavePostError = {
-    success: false;
-    reason: "NO_OPENED_PROJECT" | "NO_MARKDOWN_DIRECTORY" | "NO_SUCH_FILE";
-  };
-  export type SavePostResult =
-    | { success: true }
-    | GetCurrentProjectError
-    | SavePostError;
-  type CreatePostError = {
-    success: false;
-    reason: "NO_OPENED_PROJECT" | "NO_MARKDOWN_DIRECTORY" | "ALREADY_EXISTS";
-  };
-  export type CreatePostResult =
-    | { success: true }
-    | GetCurrentProjectError
-    | CreatePostError;
-  type GetAssetError = {
-    success: false;
-    reason: "NO_OPENED_PROJECT" | "NO_ASSET_DIRECTORY" | "NO_SUCH_FILE";
-  };
-  export type GetAssetResult =
-    | { success: true; asset: File }
-    | GetAssetError
-    | GetCurrentProjectError;
-  type PutAssetError = {
-    success: false;
-    reason: "NO_OPENED_PROJECT" | "NO_ASSET_DIRECTORY";
-  };
-  export type PutAssetResult =
-    | { success: true; url: string }
-    | GetCurrentProjectError
-    | PutAssetError;*/
 }

@@ -28,6 +28,13 @@ export class ProjectInteractor implements ProjectUseCase {
     const result = await this.projectRepository.create(dh, config);
     return result;
   }
+  async update(
+    dh: FileSystemDirectoryHandle,
+    config: ProjectConfig
+  ): Promise<ProjectUseCase.UpdateResult> {
+    const result = await this.projectRepository.update(dh, config);
+    return result;
+  }
   async getCurrentProject(): Promise<ProjectUseCase.GetCurrentProjectResult> {
     return this.projectRepository.getCurrentProject();
   }

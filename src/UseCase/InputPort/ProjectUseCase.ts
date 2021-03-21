@@ -7,6 +7,10 @@ export interface ProjectUseCase {
     baseDh: FileSystemDirectoryHandle,
     projectConfig: ProjectConfig
   ): Promise<ProjectUseCase.CreateResult>;
+  update(
+    baseDh: FileSystemDirectoryHandle,
+    projectConfig: ProjectConfig
+  ): Promise<ProjectUseCase.UpdateResult>;
   getCurrentProject(): Promise<ProjectUseCase.GetCurrentProjectResult>;
   hasOpenedProject(): Promise<boolean>;
   render(project: Project, originalText: string): Promise<string>;
@@ -41,6 +45,14 @@ export namespace ProjectUseCase {
       | "ERROR_CREATE_FILE";
   };
   export type CreateResult = { success: true } | CreateError;
+
+  type UpdateError = {
+    reason:
+      | "NO_MARKDOWN_DIRECTORY"
+      | "NO_ASSET_DIRECTORY"
+      | "ERROR_UPDATE_FILE";
+  };
+  export type UpdateResult = Result<{ project: Project }, UpdateError>;
 
   type GetCurrentProjectError =
     | {

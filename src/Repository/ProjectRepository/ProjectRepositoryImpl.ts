@@ -173,6 +173,43 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     return { success: true, project: this.currentProject };
   }
 
+  async update(
+    dh: FileSystemDirectoryHandle,
+    config: ProjectConfig
+  ): Promise<ProjectRepository.UpdateResult> {
+    let fh: FileSystemFileHandle;
+    try {
+      fh = await dh.getFileHandle(CONFIG_FILE_NAME, { create: false });
+    } catch {
+      return { success: false, reason: "ERROR_UPDATE_FILE" };
+    }
+    let markdownDh: FileSystemDirectoryHandle;
+    try {
+      markdownDh = await resolveDirectoryHandle(dh, config.markdownDirectory);
+    } catch {
+      return { success: false, reason: "NO_MARKDOWN_DIRECTORY" };
+    }
+    let assetDh: FileSystemDirectoryHandle;
+    try {
+      assetDh = await resolveDirectoryHandle(dh, config.assetDirectory);
+    } catch {
+      return { success: false, reason: "NO_ASSET_DIRECTORY" };
+    }
+    const writable = await fh.createWritable();
+    await writable.write(encodeProject(config));
+    await writable.close();
+    this.currentProject = new Project(
+      dh,
+      markdownDh,
+      assetDh,
+      config.name,
+      config.markdownDirectory,
+      config.assetDirectory,
+      config.assetServingPath
+    );
+    return { success: true, project: this.currentProject };
+  }
+
   async hasOpenedProject(): Promise<boolean> {
     if (this.currentProject) {
       return true;

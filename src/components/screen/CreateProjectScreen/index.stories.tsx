@@ -14,6 +14,7 @@ const Template: Story<CreateProjectScreenProps> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
+  directories: ["/static", "/posts"],
   onSubmit: (value) => {
     action("onSubmit")(value);
     return new Promise((resolve) => setTimeout(resolve, 2000));
