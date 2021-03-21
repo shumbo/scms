@@ -11,6 +11,7 @@ export interface ProjectUseCase {
     baseDh: FileSystemDirectoryHandle,
     projectConfig: ProjectConfig
   ): Promise<ProjectUseCase.UpdateResult>;
+  close(): void;
   getCurrentProject(): Promise<ProjectUseCase.GetCurrentProjectResult>;
   hasOpenedProject(): Promise<boolean>;
   render(project: Project, originalText: string): Promise<string>;

@@ -210,6 +210,10 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     return { success: true, project: this.currentProject };
   }
 
+  close(): void {
+    this.currentProject = null;
+  }
+
   async hasOpenedProject(): Promise<boolean> {
     if (this.currentProject) {
       return true;

@@ -2,6 +2,7 @@ import { Box } from "@chakra-ui/layout";
 import { Skeleton } from "@chakra-ui/skeleton";
 import { useToast } from "@chakra-ui/toast";
 import { Fragment, useCallback, useEffect, useState, VFC } from "react";
+import { useHistory } from "react-router";
 
 import { ProjectConfigFormData } from "../components/project/ProjectConfigForm";
 import { EditProjectModal } from "../components/screen/EditProjectModal";
@@ -15,6 +16,7 @@ import { ProjectUseCase } from "../UseCase/InputPort/ProjectUseCase";
 export const ProjectHomePage: VFC = () => {
   const toast = useToast();
   const projectUseCase = useInjection<ProjectUseCase>(TYPES.ProjectUseCase);
+  const history = useHistory();
 
   const [project, setProject] = useState<Project>();
   useEffect(() => {
@@ -92,6 +94,10 @@ export const ProjectHomePage: VFC = () => {
             project={project}
             onEdit={() => {
               setIsOpen(true);
+            }}
+            onClose={() => {
+              projectUseCase.close();
+              history.push("/");
             }}
           />
           <EditProjectModal

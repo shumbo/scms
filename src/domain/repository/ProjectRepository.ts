@@ -11,6 +11,7 @@ export interface ProjectRepository {
     dh: FileSystemDirectoryHandle,
     config: ProjectConfig
   ): Promise<ProjectRepository.UpdateResult>;
+  close(): void;
   getCurrentProject(): Promise<ProjectRepository.GetCurrentProjectResult>;
   hasOpenedProject(): Promise<boolean>;
 }

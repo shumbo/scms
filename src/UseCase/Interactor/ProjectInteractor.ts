@@ -35,6 +35,9 @@ export class ProjectInteractor implements ProjectUseCase {
     const result = await this.projectRepository.update(dh, config);
     return result;
   }
+  close(): void {
+    this.projectRepository.close();
+  }
   async getCurrentProject(): Promise<ProjectUseCase.GetCurrentProjectResult> {
     return this.projectRepository.getCurrentProject();
   }

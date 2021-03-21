@@ -17,11 +17,13 @@ import { Project } from "../../../domain/model/Project/project";
 export type ProjectHomeScreenProps = {
   project: Project;
   onEdit: () => void;
+  onClose: () => void;
 };
 
 export const ProjectHomeScreen: VFC<ProjectHomeScreenProps> = ({
   project,
   onEdit,
+  onClose,
 }) => {
   return (
     <Fragment>
@@ -64,6 +66,11 @@ export const ProjectHomeScreen: VFC<ProjectHomeScreenProps> = ({
             </Tr>
           </Tbody>
         </Table>
+        <HStack my={4} justifyContent="center">
+          <Button colorScheme="red" onClick={onClose}>
+            Close Project
+          </Button>
+        </HStack>
       </Box>
     </Fragment>
   );
