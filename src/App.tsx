@@ -1,7 +1,9 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { VFC } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+import { ErrorFallback } from "./components/screen/ErrorFallback";
 import { InversifyProvider } from "./context/Inversify";
 import { container } from "./ioc";
 import { CreateProjectPage } from "./pages/CreateProjectPage";
@@ -18,7 +20,9 @@ export const App: VFC = () => {
               <CreateProjectPage />
             </Route>
             <Route path="/project">
-              <ProjectSidebarPage />
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <ProjectSidebarPage />
+              </ErrorBoundary>
             </Route>
             <Route path="/">
               <WelcomePage />
