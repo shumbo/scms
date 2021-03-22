@@ -3,6 +3,7 @@ import { injectable } from "inversify";
 import { Post } from "../../domain/model/Post/Post";
 import { Project } from "../../domain/model/Project/project";
 import { PostRepository } from "../../domain/repository/PostRepository";
+import { listFiles } from "../../helpers/FileSystem/listFiles";
 import { resolveFileHandle } from "../../helpers/FileSystem/resolveFileHandle";
 
 @injectable()
@@ -11,18 +12,19 @@ export class PostRepositoryImpl implements PostRepository {
     filepath: string,
     handle: FileSystemFileHandle
   ): Promise<Post> {
-    const content = await (await handle.getFile()).text();
-    return new Post(filepath, content);
+    return Post.init(filepath, handle);
   }
   async list(project: Project): Promise<PostRepository.ListResult> {
-    const posts: Post[] = [];
-    for await (const [, handle] of project.markdownDirectoryHandle.entries()) {
-      if (handle.kind === "directory") {
-        continue;
-      }
-      posts.push(await this.handleToPost(handle.name, handle));
-    }
-    return { success: true, posts };
+    const files = await listFiles(project.markdownDirectoryHandle);
+    const posts = await Promise.all(
+      files
+        .filter((e) => !e.handle.name.startsWith("."))
+        .map((e) => this.handleToPost(e.path, e.handle))
+    );
+    return {
+      success: true,
+      posts: posts.sort((a, b) => b.lastModified - a.lastModified),
+    };
   }
   async get(
     project: Project,

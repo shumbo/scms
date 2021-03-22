@@ -43,7 +43,7 @@ export const ProjectPostTablePage: VFC = () => {
           setIsCreateOpen(true);
         }}
         onEdit={(filepath) => {
-          history.push(`/project/posts/${filepath}`);
+          history.push(`/project/posts/${encodeURIComponent(filepath)}`);
         }}
       />
       <CreatePostAlert

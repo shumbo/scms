@@ -32,7 +32,7 @@ export const EditPostScreen: VFC<EditPostScreenProps> = ({
   return (
     <Box width="100%" p="16">
       <HStack justifyContent="space-between">
-        <Breadcrumb>
+        <Breadcrumb separator="-">
           <BreadcrumbItem>
             <BreadcrumbLink as={Link} to="/project/posts">
               Posts

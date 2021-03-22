@@ -1,5 +1,5 @@
 import { useToast } from "@chakra-ui/react";
-import { Fragment, useEffect, useState, VFC } from "react";
+import { Fragment, useEffect, useMemo, useState, VFC } from "react";
 import { useRouteMatch } from "react-router";
 
 import { EditPostScreen } from "../components/screen/EditPostScreen";
@@ -12,8 +12,11 @@ import { ProjectUseCase } from "../UseCase/InputPort/ProjectUseCase";
 
 export const EditPostPage: VFC = () => {
   const {
-    params: { filename },
+    params: { filename: encodedFilename },
   } = useRouteMatch<{ filename: string }>();
+  const filename = useMemo(() => decodeURIComponent(encodedFilename), [
+    encodedFilename,
+  ]);
   const toast = useToast();
   const [project] = useProject();
   const projectUseCase = useInjection<ProjectUseCase>(TYPES.ProjectUseCase);
