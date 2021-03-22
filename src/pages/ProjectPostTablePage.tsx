@@ -1,6 +1,7 @@
 import { useToast } from "@chakra-ui/toast";
-import { Fragment, useEffect, useState, VFC } from "react";
+import { Fragment, useCallback, useEffect, useState, VFC } from "react";
 import { useHistory } from "react-router";
+import useUnmountPromise from "react-use/lib/useUnmountPromise";
 
 import { CreatePostAlert } from "../components/screen/CreatePostAlert";
 import { PostTableScreen } from "../components/screen/PostTableScreen";
@@ -16,22 +17,27 @@ export const ProjectPostTablePage: VFC = () => {
   const [posts, setPosts] = useState<Post[] | null>(null);
   const toast = useToast();
   const history = useHistory();
+
+  const mounted = useUnmountPromise();
+
+  const loadPosts = useCallback(() => {
+    mounted(
+      (async () => {
+        if (!project) {
+          return;
+        }
+        const postsResult = await postUseCase.list(project);
+        if (!postsResult.success) {
+          return;
+        }
+        setPosts(postsResult.posts);
+      })()
+    );
+  }, [mounted, project, postUseCase]);
+
   useEffect(() => {
-    let isSubscribed = true;
-    (async () => {
-      if (!project) {
-        return;
-      }
-      const postsResult = await postUseCase.list(project);
-      if (!isSubscribed || !postsResult.success) {
-        return;
-      }
-      setPosts(postsResult.posts);
-    })();
-    return () => {
-      isSubscribed = false;
-    };
-  }, [postUseCase, project]);
+    loadPosts();
+  }, [loadPosts]);
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
@@ -70,6 +76,7 @@ export const ProjectPostTablePage: VFC = () => {
             });
             return;
           }
+          loadPosts();
           setIsCreateOpen(false);
           return;
         }}

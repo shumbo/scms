@@ -38,7 +38,7 @@ export const CreatePostAlert: VFC<CreatePostAlertProps> = ({
   const [isLoading, asyncTask] = useLoading();
   const initialRef = useRef<HTMLInputElement | null>(null);
   const onSubmit = (values: CreatePostFormData) => {
-    asyncTask(onCreate(values.filename, values.title));
+    asyncTask(onCreate(`${values.filename}.md`, values.title));
   };
   return (
     <Modal
