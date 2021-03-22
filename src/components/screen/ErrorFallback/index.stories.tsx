@@ -12,4 +12,9 @@ const Template: Story<ErrorFallbackProps> = (args) => (
 );
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  error: {
+    name: "DOMException",
+    message: "User activation is required to request permissions.",
+  },
+};
