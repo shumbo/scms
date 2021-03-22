@@ -12,6 +12,8 @@ export async function resolveFileHandle(
     throw new Error("Invalid filename");
   }
   const parentDirPath = pathArr.slice(0, pathArr.length - 1);
-  const parentDir = await resolveDirectoryHandle(dh, parentDirPath.join("/"));
+  const parentDir = await resolveDirectoryHandle(dh, parentDirPath.join("/"), {
+    create: options?.create,
+  });
   return parentDir.getFileHandle(filename, options);
 }

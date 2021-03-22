@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
+import { Input, InputGroup, InputRightAddon } from "@chakra-ui/input";
 import {
   Modal,
   ModalOverlay,
@@ -10,6 +10,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "@chakra-ui/modal";
+import { Tag } from "@chakra-ui/tag";
 import { RefObject, useRef, VFC } from "react";
 import { useForm } from "react-hook-form";
 
@@ -54,15 +55,20 @@ export const CreatePostAlert: VFC<CreatePostAlertProps> = ({
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>Filename</FormLabel>
-              <Input
-                name="filename"
-                required
-                ref={(e) => {
-                  register(e, { required: true });
-                  initialRef.current = e;
-                }}
-                placeholder="my-new-post.md"
-              />
+              <InputGroup>
+                <Input
+                  name="filename"
+                  required
+                  ref={(e) => {
+                    register(e, { required: true });
+                    initialRef.current = e;
+                  }}
+                  placeholder="my-new-post"
+                />
+                <InputRightAddon>
+                  <Tag>.md</Tag>
+                </InputRightAddon>
+              </InputGroup>
             </FormControl>
             <FormControl mt={4}>
               <FormLabel>Title</FormLabel>
