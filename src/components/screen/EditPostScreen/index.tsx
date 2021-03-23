@@ -52,6 +52,7 @@ export const EditPostScreen: VFC<EditPostScreenProps> = ({
         onChange={onChange}
         render={render}
         putImage={putImage}
+        onSave={onSave}
       />
     </Box>
   );

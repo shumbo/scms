@@ -4,7 +4,13 @@ import "highlight.js/styles/github-gist.css";
 import MarkdownIt from "markdown-it";
 import { ChangeEvent, useCallback, useRef, VFC } from "react";
 import { FaFileImage } from "react-icons/fa";
-import { defaultCommands, Editor, useProvider } from "react-split-mde";
+import {
+  Command,
+  CommandOption,
+  defaultCommands,
+  Editor,
+  useProvider,
+} from "react-split-mde";
 import matter from "gray-matter";
 
 import "wysiwyg.css";
@@ -35,6 +41,7 @@ export type MdEditorProps = {
   value: string;
   onChange(newValue: string): void;
   render?: (originalValue: string) => Promise<string>;
+  onSave(): Promise<void>;
   putImage: (file: File) => Promise<string | null>;
 };
 
@@ -42,6 +49,7 @@ export const MdEditor: VFC<MdEditorProps> = ({
   value,
   onChange,
   render,
+  onSave,
   putImage,
 }) => {
   const renderFn =
@@ -57,6 +65,22 @@ export const MdEditor: VFC<MdEditorProps> = ({
 
   const [mdEmit, MdProvider] = useProvider();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const saveCommand: Command = useCallback(
+    (_textarea: HTMLTextAreaElement, option: CommandOption) => {
+      const { composing, code, shiftKey, metaKey, ctrlKey } = option;
+      if ((metaKey || ctrlKey) && !shiftKey) {
+        if (!composing && code === "s") {
+          // You can define save function here
+          onSave();
+          return { stop: true, change: false };
+        }
+      }
+      return;
+    },
+    [onSave]
+  );
+
   return (
     <MdProvider>
       <Stack>
@@ -105,7 +129,7 @@ export const MdEditor: VFC<MdEditorProps> = ({
               previewClassName="wysiwyg"
               value={value}
               onChange={onChange}
-              commands={{ ...defaultCommands }}
+              commands={{ ...defaultCommands, saveCommand }}
               parser={renderFn}
             />
           </Box>
