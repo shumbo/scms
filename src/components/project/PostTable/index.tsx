@@ -1,6 +1,7 @@
 import { Button } from "@chakra-ui/button";
 import { Table, Tbody, Td, Thead, Tr } from "@chakra-ui/table";
 import { VFC } from "react";
+import format from "date-fns/format";
 
 import { Post } from "../../../domain/model/Post/Post";
 
@@ -15,6 +16,7 @@ export const PostTable: VFC<PostTableProps> = ({ posts, onEdit }) => {
       <Thead>
         <Tr>
           <Td>File</Td>
+          <Td>Date Modified</Td>
           <Td>Action</Td>
         </Tr>
       </Thead>
@@ -22,6 +24,7 @@ export const PostTable: VFC<PostTableProps> = ({ posts, onEdit }) => {
         {posts.map((post) => (
           <Tr key={post.filepath}>
             <Td>{post.filepath}</Td>
+            <Td>{format(post.lastModified, "MMM dd, yyyy HH:mm")}</Td>
             <Td>
               <Button
                 variant="outline"
