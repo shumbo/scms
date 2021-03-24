@@ -6,6 +6,7 @@ import {
   ProjectSidebar,
   ProjectSidebarItem,
 } from "../components/project/ProjectSidebar";
+import { AssetScreen } from "../components/screen/AssetScreen";
 
 import { EditPostPage } from "./EditPostPage";
 import { ProjectHomePage } from "./ProjectHomePage";
@@ -34,7 +35,7 @@ export const ProjectSidebarPage: VFC = () => {
             <EditPostPage />
           </Route>
           <Route exact path={`${path}/assets`}>
-            assets
+            <AssetScreen />
           </Route>
         </Switch>
       </Box>

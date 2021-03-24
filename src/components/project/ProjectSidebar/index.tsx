@@ -18,7 +18,13 @@ export const ProjectSidebarItem = chakra(NavLink, {
 export const ProjectSidebar: VFC<{ children: ReactNode }> = ({ children }) => (
   <VStack align="start" width="250px">
     <Box width="100%" px="2" py={4}>
-      <Text as="h1" fontSize="5xl" fontWeight="extrabold">
+      <Text
+        as="h1"
+        fontSize="5xl"
+        fontWeight="extrabold"
+        bgGradient="linear(to-l, #7928CA,#FF0080)"
+        bgClip="text"
+      >
         SCMS
       </Text>
       <VStack mt="4">{children}</VStack>
