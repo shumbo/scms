@@ -22,9 +22,9 @@ export const CreateProjectScreen: VFC<CreateProjectScreenProps> = ({
   const [loading, asyncTask] = useLoading<void>();
   const callback = methods.handleSubmit((value) => asyncTask(onSubmit(value)));
   return (
-    <Container>
+    <Container py={8}>
       <Text fontSize="3xl">Create New Project</Text>
-      <Box mt={4}>
+      <Box my={4}>
         <FormProvider {...methods}>
           <form onSubmit={callback}>
             <ProjectConfigForm directories={directories} />

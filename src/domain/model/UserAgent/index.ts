@@ -12,6 +12,8 @@ export class UserAgent {
       this.parser.satisfies({
         desktop: {
           chrome: ">=86",
+          edge: ">=86",
+          opera: ">=72",
         },
       }) ?? false
     );

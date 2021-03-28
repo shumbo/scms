@@ -4,9 +4,14 @@ import {
   Center,
   Container,
   Divider,
+  ListItem,
   Text,
+  UnorderedList,
+  VStack,
 } from "@chakra-ui/react";
 import { MouseEventHandler, VFC } from "react";
+
+import README from "./../../../../README.ja.md";
 
 export type WelcomeScreenProps = {
   supported: boolean;
@@ -44,14 +49,8 @@ export const WelcomeScreen: VFC<WelcomeScreenProps> = ({
         </Center>
       </Container>
       <Divider marginTop={4} />
-      <Container marginTop={4}>
-        <Text as="h2" fontSize="2xl">
-          What is SCMS?
-        </Text>
-        <Text mt={2}>
-          SCMS is a yet another content management system for statically
-          generated websites.
-        </Text>
+      <Container my={8}>
+        <Box className="wysiwyg" dangerouslySetInnerHTML={{ __html: README }} />
       </Container>
     </Box>
   );
