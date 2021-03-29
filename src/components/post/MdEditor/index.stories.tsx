@@ -4,7 +4,7 @@ import { useState } from "react";
 import { MdEditorProps, MdEditor } from ".";
 
 export default {
-  title: "Contenxt/MarkdownEditor",
+  title: "Content/MarkdownEditor",
   component: MdEditor,
 } as Meta;
 
