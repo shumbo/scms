@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { Box, Container, HStack, Text } from "@chakra-ui/layout";
 import { VFC } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { useLoading } from "../../../hooks/useLoading";
 import {
@@ -18,6 +19,7 @@ export const CreateProjectScreen: VFC<CreateProjectScreenProps> = ({
   directories,
   onSubmit,
 }) => {
+  const { t } = useTranslation();
   const methods = useForm<ProjectConfigFormData>();
   const [loading, asyncTask] = useLoading<void>();
   const callback = methods.handleSubmit((value) => asyncTask(onSubmit(value)));
@@ -30,7 +32,7 @@ export const CreateProjectScreen: VFC<CreateProjectScreenProps> = ({
             <ProjectConfigForm directories={directories} />
             <HStack mt={4} justify="flex-end">
               <Button isLoading={loading} type="submit" colorScheme="purple">
-                Create Project
+                {t("Create Project")}
               </Button>
             </HStack>
           </form>

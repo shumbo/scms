@@ -4,14 +4,13 @@ import {
   Center,
   Container,
   Divider,
-  ListItem,
   Text,
-  UnorderedList,
-  VStack,
 } from "@chakra-ui/react";
-import { MouseEventHandler, VFC } from "react";
+import { MouseEventHandler, useMemo, VFC } from "react";
+import { useTranslation } from "react-i18next";
 
-import README from "./../../../../README.ja.md";
+import README_JA from "./../../../../README.ja.md";
+import README from "./../../../../README.md";
 
 export type WelcomeScreenProps = {
   supported: boolean;
@@ -22,6 +21,13 @@ export const WelcomeScreen: VFC<WelcomeScreenProps> = ({
   onClick,
   supported,
 }) => {
+  const { t, i18n } = useTranslation();
+  const html: string = useMemo(() => {
+    if (i18n.language === "ja") {
+      return README_JA.html;
+    }
+    return README.html;
+  }, [i18n]);
   return (
     <Box>
       <Container centerContent>
@@ -35,7 +41,7 @@ export const WelcomeScreen: VFC<WelcomeScreenProps> = ({
           SCMS
         </Text>
         <Text fontSize="xl">
-          Content Manager for Statically Generated Websites
+          {t("Content Manager for Statically Generated Websites")}
         </Text>
         <Center>
           <Button
@@ -44,13 +50,13 @@ export const WelcomeScreen: VFC<WelcomeScreenProps> = ({
             colorScheme="purple"
             onClick={onClick}
           >
-            Start
+            {t("Start")}
           </Button>
         </Center>
       </Container>
       <Divider marginTop={4} />
       <Container my={8}>
-        <Box className="wysiwyg" dangerouslySetInnerHTML={{ __html: README }} />
+        <Box className="wysiwyg" dangerouslySetInnerHTML={{ __html: html }} />
       </Container>
     </Box>
   );

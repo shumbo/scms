@@ -8,6 +8,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { VFC } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { MdEditor } from "../../post/MdEditor";
@@ -29,6 +30,7 @@ export const EditPostScreen: VFC<EditPostScreenProps> = ({
   render,
   putImage,
 }) => {
+  const { t } = useTranslation();
   return (
     <Box width="100%" p="16">
       <HStack justifyContent="space-between">
@@ -43,7 +45,7 @@ export const EditPostScreen: VFC<EditPostScreenProps> = ({
           </BreadcrumbItem>
         </Breadcrumb>
         <Button onClick={onSave} colorScheme="purple">
-          Save
+          {t("Save")}
         </Button>
       </HStack>
       <Divider my="4" />

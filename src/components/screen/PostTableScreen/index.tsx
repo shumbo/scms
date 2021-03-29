@@ -12,6 +12,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { Fragment, MouseEventHandler, VFC } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Post } from "../../../domain/model/Post/Post";
 import { PostTable } from "../../project/PostTable";
@@ -27,13 +28,14 @@ export const PostTableScreen: VFC<PostTableScreenProps> = ({
   onCreate,
   onEdit,
 }) => {
+  const { t } = useTranslation();
   return (
     <Fragment>
       <Box width="100%" p="16">
         <HStack justifyContent="space-between">
-          <Heading>Posts</Heading>
+          <Heading>{t("Posts")}</Heading>
           <Button onClick={onCreate} colorScheme="purple">
-            New Post
+            {t("New Post")}
           </Button>
         </HStack>
         <Divider my="4"></Divider>
@@ -51,11 +53,10 @@ export const PostTableScreen: VFC<PostTableScreenProps> = ({
             >
               <AlertIcon boxSize="40px" mr={0} />
               <AlertTitle mt={4} mb={1} fontSize="lg">
-                No Posts
+                {t("No Posts")}
               </AlertTitle>
               <AlertDescription maxWidth="md">
-                Click &quot;New Post&quot; to create a new post, or review
-                markdown directory of your project.
+                {t(`PostTableScreen__NO_POST_MESSAGE`)}
               </AlertDescription>
             </Alert>
           )

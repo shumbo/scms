@@ -15,7 +15,10 @@ const Template: Story<PostTableScreenProps> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-  posts: [new Post("xxx.md"), new Post("yyy.md")],
+  posts: [
+    new Post("xxx.md", Date.now(), "hello"),
+    new Post("yyy.md", Date.now(), "good morning"),
+  ],
 };
 
 export const Empty = Template.bind({});

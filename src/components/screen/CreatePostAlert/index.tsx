@@ -13,6 +13,7 @@ import {
 import { Tag } from "@chakra-ui/tag";
 import { RefObject, useRef, VFC } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { useLoading } from "../../../hooks/useLoading";
 
@@ -34,6 +35,7 @@ export const CreatePostAlert: VFC<CreatePostAlertProps> = ({
   onClose,
   onCreate,
 }) => {
+  const { t } = useTranslation();
   const { register, handleSubmit } = useForm<CreatePostFormData>();
   const [isLoading, asyncTask] = useLoading();
   const initialRef = useRef<HTMLInputElement | null>(null);
@@ -50,11 +52,11 @@ export const CreatePostAlert: VFC<CreatePostAlertProps> = ({
       <ModalOverlay />
       <ModalContent>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>New Post</ModalHeader>
+          <ModalHeader>{t("New Post")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel>Filename</FormLabel>
+              <FormLabel>{t("Filename")}</FormLabel>
               <InputGroup>
                 <Input
                   name="filename"
@@ -71,7 +73,7 @@ export const CreatePostAlert: VFC<CreatePostAlertProps> = ({
               </InputGroup>
             </FormControl>
             <FormControl mt={4}>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>{t("Title")}</FormLabel>
               <Input
                 name="title"
                 required
@@ -82,10 +84,10 @@ export const CreatePostAlert: VFC<CreatePostAlertProps> = ({
           </ModalBody>
           <ModalFooter>
             <Button type="button" mr={3} onClick={onClose}>
-              Cancel
+              {t("Cancel")}
             </Button>
             <Button type="submit" colorScheme="purple" isLoading={isLoading}>
-              Create
+              {t("Create")}
             </Button>
           </ModalFooter>
         </form>

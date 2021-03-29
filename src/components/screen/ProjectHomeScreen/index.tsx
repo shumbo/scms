@@ -11,6 +11,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { Fragment, VFC } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Project } from "../../../domain/model/Project/project";
 
@@ -25,6 +26,7 @@ export const ProjectHomeScreen: VFC<ProjectHomeScreenProps> = ({
   onEdit,
   onClose,
 }) => {
+  const { t } = useTranslation();
   return (
     <Fragment>
       <Box width="100%" p="16">
@@ -36,7 +38,7 @@ export const ProjectHomeScreen: VFC<ProjectHomeScreenProps> = ({
             }}
             colorScheme="purple"
           >
-            Edit
+            {t("Edit")}
           </Button>
         </HStack>
         <Divider my="4" />
@@ -49,26 +51,26 @@ export const ProjectHomeScreen: VFC<ProjectHomeScreenProps> = ({
           </Thead>
           <Tbody>
             <Tr>
-              <Td>Project Name</Td>
+              <Td>{t("Project Name")}</Td>
               <Td>{project.name}</Td>
             </Tr>
             <Tr>
-              <Td>Markdown Directory</Td>
+              <Td>{t("Markdown Directory")}</Td>
               <Td>{project.markdownDirectory}</Td>
             </Tr>
             <Tr>
-              <Td>Asset Directory</Td>
+              <Td>{t("Asset Directory")}</Td>
               <Td>{project.assetDirectory}</Td>
             </Tr>
             <Tr>
-              <Td>Asset Serving Path</Td>
+              <Td>{t("Asset Serving Path")}</Td>
               <Td>{project.assetServingPath}</Td>
             </Tr>
           </Tbody>
         </Table>
         <HStack my={4} justifyContent="center">
           <Button colorScheme="red" onClick={onClose}>
-            Close Project
+            {t("Close Project")}
           </Button>
         </HStack>
       </Box>

@@ -1,5 +1,6 @@
 import { useToast } from "@chakra-ui/toast";
 import { Fragment, useCallback, useEffect, useState, VFC } from "react";
+import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router";
 import useUnmountPromise from "react-use/lib/useUnmountPromise";
 
@@ -12,6 +13,7 @@ import { TYPES } from "../TYPES";
 import { PostUseCase } from "../UseCase/InputPort/PostUseCase";
 
 export const ProjectPostTablePage: VFC = () => {
+  const { t } = useTranslation();
   const [project] = useProject();
   const postUseCase = useInjection<PostUseCase>(TYPES.PostUseCase);
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -64,14 +66,14 @@ export const ProjectPostTablePage: VFC = () => {
           try {
             await postUseCase.create(project, filename, title);
             toast({
-              title: "Post Created",
-              description: "New file has been created",
+              title: t("Post Created"),
+              description: t("New file has been created"),
               status: "success",
             });
           } catch {
             toast({
-              title: "Error",
-              description: "We couldn't create a new file",
+              title: t("Error"),
+              description: t("We couldn't create a new file"),
               status: "error",
             });
             return;

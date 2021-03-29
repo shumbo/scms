@@ -2,10 +2,12 @@ import { Alert } from "@chakra-ui/alert";
 import { Box } from "@chakra-ui/layout";
 import { AlertIcon, AlertTitle } from "@chakra-ui/react";
 import { VFC } from "react";
+import { useTranslation } from "react-i18next";
 
 // export type AssetScreenProps = {};
 
 export const AssetScreen: VFC = () => {
+  const { t } = useTranslation();
   return (
     <Box p="16">
       <Alert
@@ -18,7 +20,7 @@ export const AssetScreen: VFC = () => {
       >
         <AlertIcon boxSize="40px" mr={0} />
         <AlertTitle mt={4} mb={1} fontSize="lg">
-          Not implemented yet 🙁
+          {t("Not implemented yet 🙁")}
         </AlertTitle>
       </Alert>
     </Box>

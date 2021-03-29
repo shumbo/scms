@@ -9,6 +9,7 @@ import {
 import { Button, ModalFooter } from "@chakra-ui/react";
 import { RefObject, useEffect, useMemo, useRef, VFC } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { useLoading } from "../../../hooks/useLoading";
 import {
@@ -33,6 +34,8 @@ export const EditProjectModal: VFC<EditProjectModalProps> = ({
   onClose,
   onSave,
 }) => {
+  const { t } = useTranslation();
+
   const methods = useForm<ProjectConfigFormData>({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
@@ -64,10 +67,10 @@ export const EditProjectModal: VFC<EditProjectModalProps> = ({
             </ModalBody>
             <ModalFooter>
               <Button type="button" mr={3} onClick={onClose}>
-                Cancel
+                {t("Cancel")}
               </Button>
               <Button type="submit" colorScheme="purple" isLoading={isLoading}>
-                Save
+                {t("Save")}
               </Button>
             </ModalFooter>
           </form>

@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { Table, Tbody, Td, Thead, Tr } from "@chakra-ui/table";
 import { VFC } from "react";
 import format from "date-fns/format";
+import { useTranslation } from "react-i18next";
 
 import { Post } from "../../../domain/model/Post/Post";
 
@@ -11,13 +12,14 @@ export type PostTableProps = {
 };
 
 export const PostTable: VFC<PostTableProps> = ({ posts, onEdit }) => {
+  const { t } = useTranslation();
   return (
     <Table variant="striped">
       <Thead>
         <Tr>
-          <Td>File</Td>
-          <Td>Date Modified</Td>
-          <Td>Action</Td>
+          <Td>{t("File")}</Td>
+          <Td>{t("Date Modified")}</Td>
+          <Td>{t("Action")}</Td>
         </Tr>
       </Thead>
       <Tbody>
@@ -31,7 +33,7 @@ export const PostTable: VFC<PostTableProps> = ({ posts, onEdit }) => {
                 colorScheme="purple"
                 onClick={() => onEdit(post.filepath)}
               >
-                Edit
+                {t("Edit")}
               </Button>
             </Td>
           </Tr>

@@ -10,6 +10,7 @@ import { useRef, VFC } from "react";
 import { FallbackProps } from "react-error-boundary";
 import { Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
+import { useTranslation } from "react-i18next";
 
 export type ErrorFallbackProps = FallbackProps;
 
@@ -17,6 +18,7 @@ export const ErrorFallback: VFC<ErrorFallbackProps> = ({
   error,
   resetErrorBoundary,
 }) => {
+  const { t } = useTranslation();
   const leastDestructiveRef = useRef<HTMLButtonElement | null>(null);
   if (error.message === "User activation is required to request permissions.") {
     return (
@@ -28,12 +30,9 @@ export const ErrorFallback: VFC<ErrorFallbackProps> = ({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Could not open the directory</ModalHeader>
+          <ModalHeader>{t("Could not open the directory")}</ModalHeader>
           <ModalBody>
-            <Text>
-              We could not open the project directory. Please click the button
-              below to retry.
-            </Text>
+            <Text>{t("ErrorFallback__activation_error_message")}</Text>
           </ModalBody>
           <ModalFooter>
             <Button
@@ -43,7 +42,7 @@ export const ErrorFallback: VFC<ErrorFallbackProps> = ({
                 resetErrorBoundary();
               }}
             >
-              Retry
+              {t("Retry")}
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -59,9 +58,9 @@ export const ErrorFallback: VFC<ErrorFallbackProps> = ({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>An error occured</ModalHeader>
+        <ModalHeader>{t("An error occured")}</ModalHeader>
         <ModalBody>
-          <Text>Unknown error has occured. Please retry.</Text>
+          <Text>{t("ErrorFallback__unknown_error_message")}</Text>
         </ModalBody>
         <ModalFooter>
           <Button
@@ -71,7 +70,7 @@ export const ErrorFallback: VFC<ErrorFallbackProps> = ({
               resetErrorBoundary();
             }}
           >
-            Retry
+            {t("Retry")}
           </Button>
         </ModalFooter>
       </ModalContent>
